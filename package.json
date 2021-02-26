@@ -1,0 +1,68 @@
+{
+  "name": "electronVue",
+  "version": "0.1.0",
+  "author": "xuxin",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "icon": "electron-icon-builder --input=./public/icons/icon.png --output=public --flatten",
+    "electron:build": "vue-cli-service electron:build",
+    "build:dev:win32": "vue-cli-service electron:build --mode dev --win --ia32",
+    "build:dev:win64": "vue-cli-service electron:build --mode dev --win --x64",
+    "build:test:win32": "vue-cli-service electron:build --mode test --win --ia32",
+    "build:test:win64": "vue-cli-service electron:build --mode test --win --x64",
+    "build:prod:win32": "vue-cli-service electron:build --mode prod --win --ia32",
+    "build:prod:win64": "vue-cli-service electron:build --mode prod --win --x64",
+    "build:dev:mac": "vue-cli-service electron:build --mode dev --mac",
+    "build:test:mac": "vue-cli-service electron:build --mode test --mac",
+    "build:prod:mac": "vue-cli-service electron:build --mode prod --mac",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
+  },
+  "main": "background.js",
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "electron-log": "^4.3.2",
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "babel-eslint": "^10.1.0",
+    "electron": "^11.0.0",
+    "electron-devtools-installer": "^3.1.0",
+    "electron-icon-builder": "^2.0.1",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0-0",
+    "vue-cli-plugin-electron-builder": "~2.0.0-rc.6"
+  },
+  "eslintConfig": {
+    "globals": {
+      "__static": true
+    },
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "__npminstall_done": false
+}
