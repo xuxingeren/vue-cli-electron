@@ -127,17 +127,3 @@ app.on('window-all-closed', () => {
 app.on('browser-window-created', () => {
   console.log('window-created')
 })
-
-// if (isDevelopment) {
-//   if (process.platform === 'win32') {
-//     process.on('message', data => {
-//       if (data === 'graceful-exit') {
-//         app.quit()
-//       }
-//     })
-//   } else {
-//     process.on('SIGTERM', () => {
-//       app.quit()
-//     })
-//   }
-// }
