@@ -6,7 +6,7 @@ function resolve(dir) {
 }
 
 const buildcfg = {
-  title: 'electron',
+  title: 'vue-cli-electron',
   port: 80, // 本地服务端口号
   outputDir: 'dist', // 打包输出文件名
   publicPath: process.env.BASE_URL, // 打包后文件链接
@@ -31,8 +31,7 @@ module.exports = {
     config.resolve.alias.set('@', resolve('src/renderer'))
   },
   configureWebpack: (config) => {
-    if (~['analyz', 'production'].indexOf(buildcfg.env)) {
-      config.mode = 'production'
+    if (buildcfg.env === 'production') {
       buildcfg.closeConsole && config.plugins.push(
         new TerserPlugin({
           terserOptions: {
@@ -45,9 +44,8 @@ module.exports = {
           }
         })
       )
-    } else {
-      config.mode = 'development'
     }
+    config.mode = buildcfg.env
   },
   devServer: {
     open: false,
@@ -59,18 +57,14 @@ module.exports = {
       entry: 'src/renderer/main.js',
       template: 'public/index.html',
       filename: 'index.html',
-      title: 'electronVue',
+      title: buildcfg.title,
       chunks: ['chunk-vendors', 'chunk-common', 'index']
     },
     loader: 'src/loader/main.js'
   },
   pluginOptions: {
     electronBuilder: {
-      // chainWebpackMainProcess: (config) => {
-      //   console.log(config)
-      // },
       mainProcessFile: 'src/main/index.js',
-      // rendererProcessFile: 'src/main.js',
       mainProcessWatch: ['src/main'],
       builderOptions: {
         appId: process.env.VUE_APP_APPID,

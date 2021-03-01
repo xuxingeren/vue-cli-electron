@@ -1,15 +1,17 @@
 {
-  "name": "electronVue",
+  "name": "vue-cli-electron",
   "version": "0.1.0",
   "author": "xuxin",
   "private": true,
   "license": "MIT",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "electron:serve": "vue-cli-service electron:serve",
     "lint": "vue-cli-service lint",
     "icon": "electron-icon-builder --input=./public/icons/icon.png --output=public --flatten",
-    "electron:build": "vue-cli-service electron:build",
+    "build:dev": "vue-cli-service build --mode dev",
+    "build:test": "vue-cli-service build --mode test",
+    "build:prod": "vue-cli-service build --mode prod",
     "build:dev:win32": "vue-cli-service electron:build --mode dev --win --ia32",
     "build:dev:win64": "vue-cli-service electron:build --mode dev --win --x64",
     "build:test:win32": "vue-cli-service electron:build --mode test --win --ia32",
@@ -19,7 +21,6 @@
     "build:dev:mac": "vue-cli-service electron:build --mode dev --mac",
     "build:test:mac": "vue-cli-service electron:build --mode test --mac",
     "build:prod:mac": "vue-cli-service electron:build --mode prod --mac",
-    "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
