@@ -8,7 +8,7 @@
     "serve": "vue-cli-service serve",
     "electron:serve": "vue-cli-service electron:serve",
     "lint": "vue-cli-service lint",
-    "icon": "electron-icon-builder --input=./public/icons/icon.png --output=public --flatten",
+    "icons": "electron-icon-builder --input=./public/icons/icon.png --output=public --flatten",
     "build:dev": "vue-cli-service build --mode dev",
     "build:test": "vue-cli-service build --mode test",
     "build:prod": "vue-cli-service build --mode prod",

@@ -16,7 +16,7 @@ export default function(win) {
   if (isMac) {
     contextMenu = Menu.buildFromTemplate([
       {
-        label: '显示鲸鱼活动',
+        label: '显示vue-cli-electron',
         click: () => {
           win.show()
           win.setSkipTaskbar(false)
@@ -43,6 +43,6 @@ export default function(win) {
       win.setSkipTaskbar(false)
     })
   }
-  tray.setToolTip('鲸鱼活动')
+  tray.setToolTip('vue-cli-electron')
   tray.setContextMenu(contextMenu)
 }

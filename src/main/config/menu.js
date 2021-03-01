@@ -36,7 +36,7 @@ function info() {
   dialog.showMessageBox({
     title: '关于',
     type: 'info',
-    message: '鲸鱼活动',
+    message: 'vue-cli-electron',
     detail: `版本信息：\nelectron版本：${process.versions.electron}\n当前系统：${os.type()} ${os.arch()} ${os.release()}\n当前版本：${process.env.VUE_APP_ENV}，${process.env.VUE_APP_VERSION}`,
     noLink: true,
     buttons: ['确定']
@@ -59,14 +59,14 @@ function setMenu(win) {
             dialog.showMessageBox({
               title: '关于',
               type: 'info',
-              message: '鲸鱼活动',
+              message: 'vue-cli-electron',
               detail: `当前版本：${process.env.VERSION}`,
               noLink: true,
               buttons: ['确定']
             })
           }
         }, {
-          label: '隐藏鲸鱼活动',
+          label: '隐藏vue-cli-electron',
           role: 'hide'
         }, {
           label: '隐藏其他',
