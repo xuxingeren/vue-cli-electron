@@ -40,7 +40,7 @@ module.exports = {
         })
       )
     }
-    config.mode = buildcfg.env
+    config.mode = process.env.NODE_ENV
   },
   devServer: {
     open: false,
