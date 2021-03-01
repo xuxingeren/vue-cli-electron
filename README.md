@@ -2,5 +2,6 @@
 
 ## Project setup
 ```
-yarn install
+npm install
 ```
+## 使用文档[链接](https://xuxin123.com/category/electron/)
