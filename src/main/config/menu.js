@@ -102,7 +102,8 @@ function setMenu(win) {
     } else {
       Menu.setApplicationMenu(null)
     }
-    win.webContents.closeDevTools()
+    win.webContents.openDevTools({ mode: 'detach' })
+    // win.webContents.closeDevTools()
   }
 }
 

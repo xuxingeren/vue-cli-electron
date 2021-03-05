@@ -32,6 +32,7 @@ function initWindow() {
       height: 600,
       frame: false,
       backgroundColor: '#222',
+      show: false,
       transparent: true,
       skipTaskbar: true,
       resizable: false,
@@ -40,6 +41,9 @@ function initWindow() {
         contextIsolation: false
       }
     }, 'loader', 'loader.html')
+    loaderWin.once('ready-to-show', () => {
+      loaderWin.show()
+    })
     loaderWin.on('closed', () => {
       loaderWin = null
     })
@@ -47,7 +51,7 @@ function initWindow() {
 
   win = createWindow({
     height: 810,
-    minHeight: process.env.VUE_APP_ENV === 'production' ? 810 : 830,
+    minHeight: !isMac && process.env.VUE_APP_ENV === 'production' ? 810 - 20 : 810,
     width: 1440,
     minWidth: 1440,
     useContentSize: true,
@@ -66,9 +70,13 @@ function initWindow() {
 
   setMenu(win)
   setTray(win)
-  win.webContents.once('dom-ready', () => {
+  win.once('ready-to-show', () => {
     loaderWin && loaderWin.destroy()
     win.show()
+    // setTimeout(() => {
+    //   loaderWin && loaderWin.destroy()
+    //   win.show()
+    // }, 2000)
   })
   win.on('closed', () => {
     win = null
