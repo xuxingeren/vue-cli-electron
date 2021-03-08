@@ -59,6 +59,8 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
+      nodeIntegration: true,
+      preload: 'src/renderer/preload/ipcRenderer.js',
       mainProcessFile: 'src/main/index.js',
       mainProcessWatch: ['src/main'],
       builderOptions: {

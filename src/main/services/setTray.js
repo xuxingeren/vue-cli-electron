@@ -12,32 +12,22 @@ export default function(win) {
     image.setTemplateImage(true)
   }
   tray = new Tray(image)
-  let contextMenu
-  if (isMac) {
-    contextMenu = Menu.buildFromTemplate([
-      {
-        label: '显示vue-cli-electron',
-        click: () => {
-          win.show()
-          win.setSkipTaskbar(false)
-        }
-      }, {
-        label: '退出',
-        click: () => {
-          global.willQuitApp = true
-          win.close()
-        }
+  let contextMenu = Menu.buildFromTemplate([
+    {
+      label: '显示vue-cli-electron',
+      click: () => {
+        win.show()
+        win.setSkipTaskbar(false)
       }
-    ])
-  } else {
-    contextMenu = Menu.buildFromTemplate([
-      {
-        label: '退出',
-        click: () => {
-          win.destroy()
-        }
+    }, {
+      label: '退出',
+      click: () => {
+        global.willQuitApp = true
+        win.close()
       }
-    ])
+    }
+  ])
+  if (!isMac) {
     tray.on('click', () => {
       win.show()
       win.setSkipTaskbar(false)

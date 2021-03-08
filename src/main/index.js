@@ -2,10 +2,12 @@
 
 import { app, protocol } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import installExtension from 'electron-devtools-installer'
+// import installExtension from 'electron-devtools-installer'
+import path from 'path'
 import createWindow from './services/createWindow'
 import winSingle from './services/winSingle'
 import setTray from './services/setTray'
+import ipcMain from './services/ipcMain'
 import config from './config/index'
 import global from './config/global'
 import setMenu from './config/menu'
@@ -57,17 +59,14 @@ function initWindow() {
     useContentSize: true,
     show: false,
     webPreferences: {
-      contextIsolation: false,
-      nodeIntegrationInSubFrames: true,
-      webSecurity: false,
-      webviewTag: true,
-      enableRemoteModule: true,
+      nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js'),
       scrollBounce: isMac
     }
   }, '', 'index.html')
 
   global.sharedObject.win = win
-
+  ipcMain()
   setMenu(win)
   setTray(win)
   win.once('ready-to-show', () => {
@@ -91,32 +90,37 @@ async function onAppReady() {
 
   initWindow()
 
-  if (isDevelopment && !process.env.IS_TEST) {
-    try {
-      await installExtension({
-        id: 'ljjemllljcmogpfapbkkighbhhppjdbg',
-        electron: '>=1.2.1'
-      })
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
-    }
-  }
+  // if (isDevelopment && !process.env.IS_TEST) {
+  //   try {
+  //     await installExtension({
+  //       id: 'ljjemllljcmogpfapbkkighbhhppjdbg',
+  //       electron: '>=1.2.1'
+  //     })
+  //   } catch (e) {
+  //     console.error('Vue Devtools failed to install:', e.toString())
+  //   }
+  // }
   win.on('close', (e) => {
-    if (global.willQuitApp) {
-      app.quit()
-    } else {
-      if (isMac && win.isFullScreen()) {
-        win.once('leave-full-screen', function () {
-          win.setSkipTaskbar(true)
-          win.hide()
-        })
-        win.setFullScreen(false)
-      } else {
-        win.setSkipTaskbar(true)
-        win.hide()
-      }
+    console.log('close', global.willQuitApp)
+    if (!global.willQuitApp) {
+      win.webContents.send('win-close-tips')
       e.preventDefault()
     }
+    // if (global.willQuitApp) {
+    //   app.quit()
+    // } else {
+    //   if (isMac && win.isFullScreen()) {
+    //     win.once('leave-full-screen', function () {
+    //       win.setSkipTaskbar(true)
+    //       win.hide()
+    //     })
+    //     win.setFullScreen(false)
+    //   } else {
+    //     win.setSkipTaskbar(true)
+    //     win.hide()
+    //   }
+    //   e.preventDefault()
+    // }
   })
 }
 
@@ -125,9 +129,11 @@ async function onAppReady() {
 app.isReady() ? onAppReady() : app.on('ready', onAppReady)
 app.on('activate', () => win.show())
 app.on('before-quit', () => {
+  console.log('before-quit')
   global.willQuitApp = true
 })
 app.on('window-all-closed', () => {
+  console.log('window-all-closed')
   if (!isMac) {
     app.quit()
   }
@@ -135,3 +141,17 @@ app.on('window-all-closed', () => {
 app.on('browser-window-created', () => {
   console.log('window-created')
 })
+
+if (isDevelopment) {
+  if (process.platform === 'win32') {
+    process.on('message', (data) => {
+      if (data === 'graceful-exit') {
+        app.quit()
+      }
+    })
+  } else {
+    process.on('SIGTERM', () => {
+      app.quit()
+    })
+  }
+}
