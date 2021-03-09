@@ -79,10 +79,17 @@ function initWindow() {
     // }, 2000)
   })
   win.on('enter-full-screen', () => {
-    app.commandLine.appendSwitch('disable-pinch')
+    isMac && app.commandLine.appendSwitch('disable-pinch', true)
   })
   win.on('leave-full-screen', () => {
-    
+    isMac && app.commandLine.appendSwitch('disable-pinch', false)
+  })
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.type === 'keyUp') {
+      if (input.key.toLowerCase() === 'f11') {
+        win.setFullScreen(!win.isFullScreen())
+      }
+    }
   })
   win.on('closed', () => {
     win = null
@@ -108,26 +115,11 @@ async function onAppReady() {
   //   }
   // }
   win.on('close', (e) => {
-    console.log('close', global.willQuitApp)
+    console.log('close', willQuitApp)
     if (!willQuitApp) {
       win.webContents.send('win-close-tips', { isMac })
       e.preventDefault()
     }
-    // if (global.willQuitApp) {
-    //   app.quit()
-    // } else {
-    //   if (isMac && win.isFullScreen()) {
-    //     win.once('leave-full-screen', function () {
-    //       win.setSkipTaskbar(true)
-    //       win.hide()
-    //     })
-    //     win.setFullScreen(false)
-    //   } else {
-    //     win.setSkipTaskbar(true)
-    //     win.hide()
-    //   }
-    //   e.preventDefault()
-    // }
   })
 }
 
