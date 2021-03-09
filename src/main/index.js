@@ -17,6 +17,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 let win = null
 let loaderWin = null
+let willQuitApp = false
 
 // 注册文件加载策略
 protocol.registerSchemesAsPrivileged([
@@ -77,6 +78,12 @@ function initWindow() {
     //   win.show()
     // }, 2000)
   })
+  win.on('enter-full-screen', () => {
+    app.commandLine.appendSwitch('disable-pinch')
+  })
+  win.on('leave-full-screen', () => {
+    
+  })
   win.on('closed', () => {
     win = null
     global.sharedObject.win = null
@@ -102,8 +109,8 @@ async function onAppReady() {
   // }
   win.on('close', (e) => {
     console.log('close', global.willQuitApp)
-    if (!global.willQuitApp) {
-      win.webContents.send('win-close-tips')
+    if (!willQuitApp) {
+      win.webContents.send('win-close-tips', { isMac })
       e.preventDefault()
     }
     // if (global.willQuitApp) {
@@ -130,7 +137,7 @@ app.isReady() ? onAppReady() : app.on('ready', onAppReady)
 app.on('activate', () => win.show())
 app.on('before-quit', () => {
   console.log('before-quit')
-  global.willQuitApp = true
+  willQuitApp = true
 })
 app.on('window-all-closed', () => {
   console.log('window-all-closed')

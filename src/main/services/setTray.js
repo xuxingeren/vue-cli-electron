@@ -1,5 +1,4 @@
-import { Tray, nativeImage, Menu } from 'electron'
-import global from '../config/global.js'
+import { Tray, nativeImage, Menu, app } from 'electron'
 const isMac = process.platform === 'darwin'
 const path = require('path')
 let tray = null
@@ -22,8 +21,7 @@ export default function(win) {
     }, {
       label: '退出',
       click: () => {
-        global.willQuitApp = true
-        win.close()
+        app.quit()
       }
     }
   ])

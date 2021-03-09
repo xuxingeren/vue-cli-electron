@@ -34,9 +34,10 @@ export default defineComponent({
     })
     onMounted(() => {
       console.log(cfg)
-      window.ipcRenderer.on('win-close-tips', (event) => {
+      window.ipcRenderer.on('win-close-tips', (event, data) => {
         const closeChecked = LgetItem('closeChecked')
-        if (closeChecked) {
+        const isMac = data.isMac
+        if (closeChecked || isMac) {
           event.sender.invoke('win-close', LgetItem('closeValue'))
         } else {
           visible.value = true

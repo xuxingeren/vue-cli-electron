@@ -5,8 +5,8 @@ export default function () {
   const win = global.sharedObject.win
   const isMac = process.platform === 'darwin'
   ipcMain.handle('win-close', (event, data) => {
-    if (data === 1) {
-      if (isMac && win.isFullScreen()) {
+    if (isMac) {
+      if (win.isFullScreen()) {
         win.once('leave-full-screen', function () {
           win.setSkipTaskbar(true)
           win.hide()
@@ -17,12 +17,33 @@ export default function () {
         win.hide()
       }
     } else {
-      if (isMac) {
-        app.quit()
+      if (data === 1) {
+        win.setSkipTaskbar(true)
+        win.hide()
       } else {
-        win.destroy()
+        app.quit()
       }
     }
+    // if (data === 1) {
+    //   if (isMac && win.isFullScreen()) {
+    //     win.once('leave-full-screen', function () {
+    //       win.setSkipTaskbar(true)
+    //       win.hide()
+    //     })
+    //     win.setFullScreen(false)
+    //   } else {
+    //     win.setSkipTaskbar(true)
+    //     win.hide()
+    //   }
+    //   win.setSkipTaskbar(true)
+    //   win.hide()
+    // } else {
+    //   if (isMac) {
+    //     app.quit()
+    //   } else {
+    //     win.destroy()
+    //   }
+    // }
   })
   ipcMain.handle('win-focus', () => {
     if (win.isMinimized()) {

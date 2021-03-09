@@ -12,8 +12,8 @@ const menuConfig = [
       role: 'reload'
     }, {
       label: '退出',
-      accelerator: 'CmdOrCtrl+F4',
-      role: 'close'
+      accelerator: 'CmdOrCtrl+Q',
+      role: 'quit'
     }]
   }, {
     label: '开发者设置',
