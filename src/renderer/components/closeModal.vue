@@ -30,7 +30,6 @@ export default defineComponent({
       lineHeight: '30px',
     })
     onMounted(() => {
-
       window.ipcRenderer.on('win-close-tips', (event, data) => {
         const closeChecked = LgetItem('closeChecked')
         const isMac = data.isMac

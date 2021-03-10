@@ -60,6 +60,7 @@ function initWindow() {
     useContentSize: true,
     show: false,
     webPreferences: {
+      contextIsolation: false,
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js'),
       scrollBounce: isMac
@@ -78,6 +79,15 @@ function initWindow() {
     //   win.show()
     // }, 2000)
   })
+  // win.on('show', () => {
+  //   setTimeout(() => {
+  //     win.setOpacity(1)
+  //   }, 200)
+  // })
+  
+  // win.on('hide', () => {
+  //   win.setOpacity(0)
+  // })
   win.on('enter-full-screen', () => {
     isMac && app.commandLine.appendSwitch('disable-pinch', true)
   })
@@ -123,13 +133,14 @@ async function onAppReady() {
   })
 }
 
-
-
 app.isReady() ? onAppReady() : app.on('ready', onAppReady)
 app.on('activate', () => win.show())
 app.on('before-quit', () => {
   console.log('before-quit')
   willQuitApp = true
+})
+app.on('quit', () => {
+  console.log('quit')
 })
 app.on('window-all-closed', () => {
   console.log('window-all-closed')

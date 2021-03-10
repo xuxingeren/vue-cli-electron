@@ -84,7 +84,7 @@ module.exports = {
           }
         ],
         extends: null,
-        electronVersion: "11.3.0",
+        electronVersion: "12.0.0",
         extraResources: [],
         electronDownload: {
           mirror: "https://npm.taobao.org/mirrors/electron/"

@@ -14,8 +14,11 @@ import {
 } from 'vuex'
 import { defineComponent } from 'vue'
 import { LreItem } from '@/utils/storage'
+import cfg from '@/config'
+
 export default defineComponent({
   setup() {
+    console.log(cfg)
     const store = useStore()
     console.log(store.state.home)
     function clear() {

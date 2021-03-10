@@ -3,7 +3,7 @@ const isMac = process.platform === 'darwin'
 const path = require('path')
 let tray = null
 
-export default function(win) {
+export default function (win) {
   const iconType = isMac ? '16x16.png' : 'icon.ico'
   const icon = path.join(__static, `./icons/${iconType}`)
   const image = nativeImage.createFromPath(icon)
@@ -15,8 +15,7 @@ export default function(win) {
     {
       label: '显示vue-cli-electron',
       click: () => {
-        win.show()
-        win.setSkipTaskbar(false)
+        winShow(win)
       }
     }, {
       label: '退出',
@@ -27,10 +26,24 @@ export default function(win) {
   ])
   if (!isMac) {
     tray.on('click', () => {
-      win.show()
-      win.setSkipTaskbar(false)
+      winShow(win)
     })
   }
   tray.setToolTip('vue-cli-electron')
   tray.setContextMenu(contextMenu)
+}
+
+function winShow(win) {
+  if (win.isVisible()) {
+    if (win.isMinimized()) {
+      win.restore()
+      win.focus()
+    } else {
+      win.focus()
+    }
+  } else {
+    win.minimize()
+    win.show()
+    win.setSkipTaskbar(false)
+  }
 }
