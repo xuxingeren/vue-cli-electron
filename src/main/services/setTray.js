@@ -42,7 +42,7 @@ function winShow(win) {
       win.focus()
     }
   } else {
-    win.minimize()
+    !isMac && win.minimize()
     win.show()
     win.setSkipTaskbar(false)
   }

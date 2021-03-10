@@ -51,7 +51,6 @@ function initWindow() {
       loaderWin = null
     })
   }
-
   win = createWindow({
     height: 810,
     minHeight: !isMac && process.env.VUE_APP_ENV === 'production' ? 810 - 20 : 810,
@@ -61,7 +60,7 @@ function initWindow() {
     show: false,
     webPreferences: {
       contextIsolation: false,
-      nodeIntegration: true,
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       preload: path.join(__dirname, 'preload.js'),
       scrollBounce: isMac
     }
