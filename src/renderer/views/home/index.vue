@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <a-button type="primary" @click="clear">清除关闭设置</a-button>
+    <a-button type="primary" @click="setMessage">设置消息</a-button>
   </div>
 </template>
 
@@ -24,8 +25,12 @@ export default defineComponent({
     function clear() {
       LreItem('closeChecked')
     }
+    function setMessage() {
+      window.ipcRenderer.invoke('win-message', true)
+    }
     return {
-      clear
+      clear,
+      setMessage
     }
   }
 })

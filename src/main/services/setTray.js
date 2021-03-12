@@ -1,7 +1,7 @@
 import { Tray, nativeImage, Menu, app } from 'electron'
+import global from '../config/global'
 const isMac = process.platform === 'darwin'
 const path = require('path')
-let tray = null
 
 export default function (win) {
   const iconType = isMac ? '16x16.png' : 'icon.ico'
@@ -10,7 +10,7 @@ export default function (win) {
   if (isMac) {
     image.setTemplateImage(true)
   }
-  tray = new Tray(image)
+  global.tray = new Tray(image)
   let contextMenu = Menu.buildFromTemplate([
     {
       label: '显示vue-cli-electron',
@@ -25,12 +25,12 @@ export default function (win) {
     }
   ])
   if (!isMac) {
-    tray.on('click', () => {
+    global.tray.on('click', () => {
       winShow(win)
     })
   }
-  tray.setToolTip('vue-cli-electron')
-  tray.setContextMenu(contextMenu)
+  global.tray.setToolTip('vue-cli-electron')
+  global.tray.setContextMenu(contextMenu)
 }
 
 function winShow(win) {
