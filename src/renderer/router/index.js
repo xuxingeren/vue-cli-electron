@@ -1,9 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import page from './page'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import routes from './modules'
+import store from '../store'
 
 const router = createRouter({
-  history: createWebHashHistory(process.env.BASE_URL),
+  history: process.env.IS_ELECTRON ? createWebHashHistory(process.env.BASE_URL) : createWebHistory(process.env.BASE_URL),
   fallback: false,
   scrollBehavior(to, from, savedPosition) {
     // keep-alive 返回缓存页面后记录浏览位置
@@ -17,11 +17,13 @@ const router = createRouter({
       }, 0)
     });
   },
-  routes
+  routes: [{
+    path: '/',
+    redirect: '/main'
+  },
+  ...routes]
 })
 
-page.forEach(s => {
-  router.addRoute(s)
-})
+store.commit('role/SET_MENU_ALL', routes)
 
 export default router

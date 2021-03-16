@@ -69,24 +69,11 @@ function initWindow() {
   global.sharedObject.win = win
   ipcMain()
   setMenu(win)
-  setTray(win)
+  setTray.init(win)
   win.once('ready-to-show', () => {
     loaderWin && loaderWin.destroy()
     win.show()
-    // setTimeout(() => {
-    //   loaderWin && loaderWin.destroy()
-    //   win.show()
-    // }, 2000)
   })
-  // win.on('show', () => {
-  //   setTimeout(() => {
-  //     win.setOpacity(1)
-  //   }, 200)
-  // })
-  
-  // win.on('hide', () => {
-  //   win.setOpacity(0)
-  // })
   win.on('enter-full-screen', () => {
     isMac && app.commandLine.appendSwitch('disable-pinch', true)
   })

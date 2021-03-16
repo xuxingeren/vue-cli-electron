@@ -1,11 +1,11 @@
-import { ipcMain, app, nativeImage } from 'electron'
+import { ipcMain, app } from 'electron'
 import global from '../config/global'
-const path = require('path')
+import setTray from './setTray'
 
 export default function () {
   const win = global.sharedObject.win
   const isMac = process.platform === 'darwin'
-  ipcMain.handle('win-close', (event, data) => {
+  ipcMain.handle('win-close', (_, data) => {
     if (isMac) {
       if (win.isFullScreen()) {
         win.once('leave-full-screen', function () {
@@ -32,21 +32,7 @@ export default function () {
       win.focus()
     }
   })
-  ipcMain.handle('win-message', (data) => {
-    let count = 0
-    const iconType = isMac ? '16x16.png' : 'icon.ico'
-    const icon = path.join(__static, `./icons/${iconType}`)
-    const image = nativeImage.createFromPath(icon)
-    if (isMac) {
-      image.setTemplateImage(true)
-    }
-    win.flashFrame(data)
-    setInterval(function() {
-      if (count++ % 2 == 0) {
-        global.tray.setImage(image)
-      } else {
-        global.tray.setImage(nativeImage.createFromPath(null))
-      }
-  }, 500)
+  ipcMain.handle('win-message', (_, data) => {
+    setTray.flash(data)
   })
 }
