@@ -2,6 +2,7 @@
   <a-layout-sider
     class="sider"
     breakpoint="md"
+    collapsed-width="80"
     @collapse="onCollapse"
     @breakpoint="onBreakpoint"
     v-model:collapsed="collapsed"
@@ -31,13 +32,9 @@
           :key="item.path"
         >
           <component :is="$antIcons[item.meta.icon]" />
-          <span>{{item.meta.title}}</span>
+          <span>{{ item.meta.title }}</span>
         </a-menu-item>
-        <sub-menu
-          v-else
-          :menu-info="item"
-          :key="item.path"
-        />
+        <sub-menu v-else :menu-info="item" :key="item.path" />
       </template>
     </a-menu>
   </a-layout-sider>
@@ -46,7 +43,7 @@
 <script>
 import { useRoute, useRouter } from 'vue-router'
 import { createNamespacedHelpers, useStore } from 'vuex'
-import { defineComponent, computed, reactive, toRefs } from 'vue'
+import { defineComponent, reactive, toRefs, watch } from 'vue'
 import { SearchOutlined } from '@ant-design/icons-vue'
 import SubMenu from './SubMenu'
 const { mapGetters } = createNamespacedHelpers('role')
@@ -59,7 +56,8 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      menus: 'menus'
+      menus: 'menus',
+      collapsed: 'collapsed'
     })
   },
   setup() {
@@ -68,15 +66,14 @@ export default defineComponent({
     const store = useStore()
     const state = reactive({
       openKeys: ['/main'],
+      preOpenKeys: [route.path],
       selectedKeys: [route.path]
     })
-    const collapsed = computed({
-      get() {
-        return store.state.role.collapsed
-      },
-      set(newValue) {
-        store.commit('role/SET_COLLAPSED', newValue)
-      }
+    watch(() => state.openKeys, (_, oldVal) => {
+      state.preOpenKeys = oldVal
+    })
+    watch(() => store.state.role.collapsed, (val) => {
+      state.openKeys = val ? [] : state.preOpenKeys
     })
     function open({ key }) {
       router.push({
@@ -97,7 +94,6 @@ export default defineComponent({
     }
     return {
       ...toRefs(state),
-      collapsed,
       open,
       onSearch,
       onChange,

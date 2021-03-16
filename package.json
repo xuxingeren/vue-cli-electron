@@ -27,8 +27,10 @@
   "main": "background.js",
   "dependencies": {
     "ant-design-vue": "^2.0.1",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "electron-log": "^4.3.2",
+    "qs": "^6.5.2",
     "vue": "^3.0.7",
     "vue-router": "^4.0.5",
     "vuex": "^4.0.0"
