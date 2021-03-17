@@ -36,6 +36,7 @@ export default defineComponent({
   setup() {
     const state = reactive({
       activeId: '',
+      lastId: '',
       list: [{
         name: Mock.mock('@cname'),
         id: Mock.mock('@id'),
@@ -55,7 +56,7 @@ export default defineComponent({
     })
     onMounted(() => {
       window.ipcRenderer.on('win-focus', () => {
-        const index = state.list.findIndex(s => s.news !== 0)
+        const index = state.list.findIndex(s => s.id === state.lastId)
         ~index && openList(index)
       })
     })
@@ -97,8 +98,8 @@ export default defineComponent({
           flashTray = false
         }
       }
-      console.log(news.value)
       item.newsList.push(Mock.mock('@csentence(20)'))
+      state.lastId = item.id
       setMessage({
         flashFrame,
         flashTray,
