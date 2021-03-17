@@ -15,26 +15,12 @@ export default defineComponent({
     function clear() {
       LreItem('closeChecked')
     }
-    function setMessage(flag) {
-      window.ipcRenderer.invoke('win-message', flag)
-    }
-    setTimeout(() => {
-      const hasFocus = document.hasFocus()
-      setMessage({
-        flashFrame: !hasFocus,
-        flashTray: true
-      })
-    }, 3000)
     return {
-      clear,
-      setMessage
+      clear
     }
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.home {
-  height: 3000px;
-}
 </style>

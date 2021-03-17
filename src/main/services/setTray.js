@@ -1,4 +1,4 @@
-import { Tray, nativeImage, Menu, app } from 'electron'
+import { Tray, nativeImage, Menu, app, Notification } from 'electron'
 import global from '../config/global'
 const isMac = process.platform === 'darwin'
 const path = require('path')
@@ -27,7 +27,6 @@ class createTray {
     if (isMac) {
       this.image.setTemplateImage(true)
     }
-    console.log(888888888)
   }
   init(win) {
     global.tray = new Tray(this.image)
@@ -52,13 +51,24 @@ class createTray {
     global.tray.setToolTip('vue-cli-electron')
     global.tray.setContextMenu(contextMenu)
   }
-  flash({ flashFrame, flashTray }) {
+  flash({ flashFrame, flashTray, messageConfig }) {
     global.sharedObject.win.flashFrame(flashFrame)
     if (flashTray) {
       if (!this.flickerTimer) {
         this.flickerTimer = setInterval(() => {
           global.tray.setImage(this.count++ % 2 === 0 ? this.image : nativeImage.createFromPath(null))
         }, 500)
+        // global.tray.displayBalloon({
+        //   title: 'aaaa',
+        //   content: 'bbbbbbb'
+        // })
+        if (messageConfig) {
+          const n = new Notification(messageConfig)
+          n.show()
+          n.once('click', () => {
+            winShow(global.sharedObject.win)
+          })
+        }
       }
     } else {
       this.count = 0

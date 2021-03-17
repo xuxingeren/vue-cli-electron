@@ -1,5 +1,7 @@
 const USER_INFO = 'USER_INFO'
+const USER_TOKEN = 'USER_TOKEN'
 
 export {
-  USER_INFO
+  USER_INFO,
+  USER_TOKEN
 }

@@ -10,6 +10,14 @@ export default [{
     icon: 'PartitionOutlined'
   },
   children: [{
+    path: '/main/close',
+    name: 'mainClose',
+    component: () => import('@/views/main/close'),
+    meta: {
+      title: '窗口关闭',
+      icon: 'CloseCircleOutlined'
+    }
+  }, {
     path: '/main/tary',
     name: 'mainTary',
     component: () => import('@/views/main/tary'),
