@@ -54,27 +54,33 @@ class createTray {
   flash({ flashFrame, flashTray, messageConfig }) {
     global.sharedObject.win.flashFrame(flashFrame)
     if (flashTray) {
-      if (!this.flickerTimer) {
-        this.flickerTimer = setInterval(() => {
-          global.tray.setImage(this.count++ % 2 === 0 ? this.image : nativeImage.createFromPath(null))
-        }, 500)
-        // global.tray.displayBalloon({
-        //   title: 'aaaa',
-        //   content: 'bbbbbbb'
-        // })
-        if (messageConfig) {
-          const n = new Notification(messageConfig)
-          n.show()
-          n.once('click', () => {
-            winShow(global.sharedObject.win)
-          })
+      if (isMac) {
+        global.tray.setTitle('1')
+        app.dock.setBadge('1')
+      } else {
+        if (!this.flickerTimer && !isMac) {
+          this.flickerTimer = setInterval(() => {
+            global.tray.setImage(this.count++ % 2 === 0 ? this.image : nativeImage.createFromPath(null))
+          }, 500)
         }
+      }
+      if (messageConfig) {
+        const n = new Notification(messageConfig)
+        n.show()
+        n.once('click', () => {
+          winShow(global.sharedObject.win)
+          n.close()
+        })
       }
     } else {
       this.count = 0
       if (this.flickerTimer) {
         clearInterval(this.flickerTimer)
         this.flickerTimer = null
+      }
+      if (isMac) {
+        global.tray.setTitle('')
+        app.dock.setBadge('')
       }
       global.tray.setImage(this.image)
     }
