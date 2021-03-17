@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs, onMounted, onUnmounted } from 'vue'
+import { defineComponent, reactive, toRefs, onMounted, onUnmounted, computed } from 'vue'
 import Mock from 'mockjs'
 
 export default defineComponent({
@@ -62,15 +62,19 @@ export default defineComponent({
     onUnmounted(() => {
       window.ipcRenderer.removeListener('win-focus')
     })
-    function setMessage(flag) {
-      window.ipcRenderer.invoke('win-message', flag)
+    const news = computed(() => state.list.reduce((pre, cur) => pre + cur.news, 0))
+    function setMessage(obj) {
+      window.ipcRenderer.invoke('win-message', obj)
     }
     function openList(index) {
       state.activeId = state.list[index].id
       state.list[index].news = 0
       setMessage({
         flashFrame: false,
-        flashTray: state.list.filter(s => s.news !== 0).length !== 0
+        flashTray: state.list.filter(s => s.news !== 0).length !== 0,
+        messageConfig: {
+          news: news.value
+        }
       })
     }
     setTimeout(() => {
@@ -93,13 +97,15 @@ export default defineComponent({
           flashTray = false
         }
       }
+      console.log(news.value)
       item.newsList.push(Mock.mock('@csentence(20)'))
       setMessage({
         flashFrame,
         flashTray,
         messageConfig: {
           title: item.name,
-          body: item.newsList[item.newsList.length - 1]
+          body: item.newsList[item.newsList.length - 1],
+          news: news.value
         }
       })
     }
