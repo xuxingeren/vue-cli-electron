@@ -2,6 +2,7 @@ import { Tray, nativeImage, Menu, app, Notification } from 'electron'
 import global from '../config/global'
 const isMac = process.platform === 'darwin'
 const path = require('path')
+let notification
 
 function winShow(win) {
   if (win.isVisible()) {
@@ -67,13 +68,13 @@ class createTray {
         }, 500)
       }
       if (messageConfig.body) {
-        const n = new Notification(messageConfig)
-        n.show()
-        n.once('click', () => {
+        notification = new Notification(messageConfig)
+        notification.once('click', () => {
           winShow(global.sharedObject.win)
           global.sharedObject.win.webContents.send('win-message-read', messageConfig.id)
-          n.close()
+          notification.close()
         })
+        notification.show()
       }
     } else {
       this.count = 0
