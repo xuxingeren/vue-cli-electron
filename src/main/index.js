@@ -117,9 +117,6 @@ async function onAppReady() {
       e.preventDefault()
     }
   })
-  win.on('focus', () => {
-    win.webContents.send('win-focus')
-  })
 }
 app.setAppUserModelId(config.VUE_APP_APPID)
 app.isReady() ? onAppReady() : app.on('ready', onAppReady)

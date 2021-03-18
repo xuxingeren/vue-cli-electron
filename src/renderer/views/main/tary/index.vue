@@ -1,30 +1,39 @@
 <template>
   <div class="tary">
-    <a-button type="primary" @click="pushNews()">推送消息</a-button>
-    <a-list class="list" :data-source="list">
-      <template #renderItem="{ item, index }">
-        <a-list-item
-          class="item"
-          :class="{ active: item.id === activeId }"
-          @click="openList(index)"
-        >
-          <a-badge :count="item.news">
-            <a-list-item-meta
-              :description="item.newsList[item.newsList.length - 1]"
-            >
-              <template #title>
-                <span>{{ item.name }}</span>
-              </template>
-              <template #avatar>
-                <a-avatar
-                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                />
-              </template>
-            </a-list-item-meta>
-          </a-badge>
-        </a-list-item>
-      </template>
-    </a-list>
+    <div class="btn"><a-button type="primary" @click="pushNews()">推送消息</a-button></div>
+    <section class="box">
+      <a-list class="list" :data-source="list">
+        <template #renderItem="{ item, index }">
+          <a-list-item
+            class="item"
+            :class="{ active: item.id === activeId }"
+            @click="openList(index)"
+          >
+            <a-badge :count="item.news">
+              <a-list-item-meta
+                :description="item.newsList[item.newsList.length - 1]"
+              >
+                <template #title>
+                  <span>{{ item.name }}</span>
+                </template>
+                <template #avatar>
+                  <a-avatar
+                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                  />
+                </template>
+              </a-list-item-meta>
+            </a-badge>
+          </a-list-item>
+        </template>
+      </a-list>
+      <div class="messageList">
+        <ul class="messageBox" v-if="activeId">
+          <li v-for="(item, index) in messageList" :key="index">
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -36,7 +45,6 @@ export default defineComponent({
   setup() {
     const state = reactive({
       activeId: '',
-      lastId: '',
       list: [{
         name: Mock.mock('@cname'),
         id: Mock.mock('@id'),
@@ -55,15 +63,16 @@ export default defineComponent({
       }]
     })
     onMounted(() => {
-      window.ipcRenderer.on('win-focus', () => {
-        const index = state.list.findIndex(s => s.id === state.lastId)
+      window.ipcRenderer.on('win-message-read', (_, data) => {
+        const index = data ? state.list.findIndex(s => s.id === data) : state.list.findIndex(s => s.news !== 0)
         ~index && openList(index)
       })
     })
     onUnmounted(() => {
-      window.ipcRenderer.removeListener('win-focus')
+      window.ipcRenderer.removeListener('win-message-read')
     })
     const news = computed(() => state.list.reduce((pre, cur) => pre + cur.news, 0))
+    const messageList = computed(() => state.list.find(s => s.id === state.activeId)['newsList'])
     function setMessage(obj) {
       window.ipcRenderer.invoke('win-message', obj)
     }
@@ -72,7 +81,6 @@ export default defineComponent({
       state.list[index].news = 0
       setMessage({
         flashFrame: false,
-        flashTray: state.list.filter(s => s.news !== 0).length !== 0,
         messageConfig: {
           news: news.value
         }
@@ -83,7 +91,6 @@ export default defineComponent({
     }, 5000)
     function pushNews(index) {
       let flashFrame = true
-      let flashTray = true
       const hasFocus = document.hasFocus()
       const puahIndex = index != null ? index : getRandomIntInclusive(0, 2)
       const item = state.list[puahIndex]
@@ -95,16 +102,14 @@ export default defineComponent({
       } else {
         if (hasFocus) {
           flashFrame = false
-          flashTray = false
         }
       }
       item.newsList.push(Mock.mock('@csentence(20)'))
-      state.lastId = item.id
       setMessage({
         flashFrame,
-        flashTray,
         messageConfig: {
           title: item.name,
+          id: item.id,
           body: item.newsList[item.newsList.length - 1],
           news: news.value
         }
@@ -117,6 +122,7 @@ export default defineComponent({
     }
     return {
       ...toRefs(state),
+      messageList,
       openList,
       pushNews
     }
@@ -128,12 +134,36 @@ export default defineComponent({
 .tary {
   padding: 10px;
   flex: 1;
-  .list {
+  display: flex;
+  flex-direction: column;
+  .btn {
+    flex: 0 0 40px;
+  }
+  .box {
     padding-top: 30px;
-    .item {
-      cursor: pointer;
-      &.active {
-        background-color: #ddd;
+    display: flex;
+    flex: 1;
+    height: 100%;
+    .list {
+      width: 200px;
+      flex: 0 0 200px;
+      .item {
+        cursor: pointer;
+        &.active {
+          background-color: #ddd;
+        }
+      }
+    }
+    .messageList {
+      flex: 1;
+      overflow-y: auto;
+      height: 100%;
+      .messageBox {
+        list-style: none;
+        > li {
+          line-height: 30px;
+          padding: 10px;
+        }
       }
     }
   }

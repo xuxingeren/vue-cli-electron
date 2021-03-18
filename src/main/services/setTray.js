@@ -45,19 +45,22 @@ class createTray {
     ])
     if (!isMac) {
       global.tray.on('click', () => {
+        if (this.count !== 0) {
+          win.webContents.send('win-message-read')
+        }
         winShow(win)
       })
     }
     global.tray.setToolTip('vue-cli-electron')
     global.tray.setContextMenu(contextMenu)
   }
-  flash({ flashFrame, flashTray, messageConfig }) {
+  flash({ flashFrame, messageConfig }) {
     global.sharedObject.win.flashFrame(flashFrame)
     if (isMac && messageConfig) {
       global.tray.setTitle(messageConfig.news === 0 ? '' : messageConfig.news+ '')
       app.dock.setBadge(messageConfig.news === 0 ? '' : messageConfig.news+ '')
     }
-    if (flashTray) {
+    if (messageConfig.news !== 0) {
       if (!this.flickerTimer && !isMac) {
         this.flickerTimer = setInterval(() => {
           global.tray.setImage(this.count++ % 2 === 0 ? this.image : nativeImage.createFromPath(null))
@@ -68,6 +71,7 @@ class createTray {
         n.show()
         n.once('click', () => {
           winShow(global.sharedObject.win)
+          global.sharedObject.win.webContents.send('win-message-read', messageConfig.id)
           n.close()
         })
       }

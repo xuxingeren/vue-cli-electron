@@ -22,5 +22,6 @@ export default defineComponent({
 .layout {
   display: flex;
   min-height: 100vh;
+  flex: 1;
 }
 </style>

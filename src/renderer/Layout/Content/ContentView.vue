@@ -50,6 +50,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   border-radius: 4px;
+  flex: 1;
   .navigation {
     padding: 16px 24px;
     background-color: #fff;
