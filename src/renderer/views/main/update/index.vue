@@ -82,6 +82,7 @@ export default defineComponent({
           case 5:
             message.destroy()
             message.warning(data.data)
+            state.upDateProgress.show = false
             break
           default:
             break
