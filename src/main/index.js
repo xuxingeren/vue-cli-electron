@@ -17,7 +17,6 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 let win = null
 let loaderWin = null
-let willQuitApp = false
 
 // 注册文件加载策略
 protocol.registerSchemesAsPrivileged([
@@ -112,8 +111,8 @@ async function onAppReady() {
   //   }
   // }
   win.on('close', (e) => {
-    console.log('close', willQuitApp)
-    if (!willQuitApp) {
+    console.log('close', global.willQuitApp)
+    if (!global.willQuitApp) {
       win.webContents.send('renderer-close-tips', { isMac })
       e.preventDefault()
     }
@@ -124,7 +123,7 @@ app.isReady() ? onAppReady() : app.on('ready', onAppReady)
 app.on('activate', () => win.show())
 app.on('before-quit', () => {
   console.log('before-quit')
-  willQuitApp = true
+  global.willQuitApp = true
 })
 app.on('quit', () => {
   console.log('quit')

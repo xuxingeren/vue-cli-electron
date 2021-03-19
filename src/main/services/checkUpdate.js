@@ -1,4 +1,3 @@
-import { app } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import log from '../config/log.js'
 import global from '../config/global'
@@ -51,8 +50,8 @@ autoUpdater.on('update-downloaded', () => {
   log.info('下载完成')
   Message(4)
   setTimeout(() => {
+    global.willQuitApp = true
     autoUpdater.quitAndInstall()
-    app.exit()
   }, 1000)
 })
 

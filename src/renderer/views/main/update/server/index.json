@@ -4,7 +4,7 @@
   "data": {
     "forceUpdate": false,
     "fullUpdate": true,
-    "upDateUrl": "http://81.70.155.20:8082",
+    "upDateUrl": "http://127.0.0.1:4000/",
     "restart": true,
     "message": "我要升级成0.0.2",
     "version": "0.0.2"

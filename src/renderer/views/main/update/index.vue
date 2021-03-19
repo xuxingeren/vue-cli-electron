@@ -107,6 +107,8 @@ export default defineComponent({
               isClick && message.success('已为最新版本')
             }
           })
+        } else {
+          message.success('请在打包环境下更新')
         }
       })
     }
