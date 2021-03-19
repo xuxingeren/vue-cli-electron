@@ -1,7 +1,7 @@
 <template>
   <a-layout
     class="content"
-    :ref="refs"
+    ref="content"
     :style="{ marginLeft: collapsed ? '80px':'200px' }"
   >
     <content-header />
@@ -12,7 +12,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import ContentHeader from './ContentHeader'
 import ContentView from './ContentView'
 const { mapGetters } = createNamespacedHelpers('role')
@@ -27,16 +27,13 @@ export default defineComponent({
     ...mapGetters(['collapsed'])
   },
   setup() {
-    let content = ''
-    const refs = el => {
-      content = el
-    }
+    const content = ref(null)
     function backTop() {
-      return content.$el
+      return content.value.$el.children[1]
     }
     return {
       backTop,
-      refs
+      content
     }
   }
 })

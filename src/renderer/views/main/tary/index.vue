@@ -63,13 +63,13 @@ export default defineComponent({
       }]
     })
     onMounted(() => {
-      window.ipcRenderer.on('win-message-read', (_, data) => {
+      window.ipcRenderer.on('renderer-message-read', (_, data) => {
         const index = data ? state.list.findIndex(s => s.id === data) : state.list.findIndex(s => s.news !== 0)
         ~index && openList(index)
       })
     })
     onUnmounted(() => {
-      window.ipcRenderer.removeListener('win-message-read')
+      window.ipcRenderer.removeListener('renderer-message-read')
     })
     const news = computed(() => state.list.reduce((pre, cur) => pre + cur.news, 0))
     const messageList = computed(() => state.list.find(s => s.id === state.activeId)['newsList'])
@@ -136,6 +136,7 @@ export default defineComponent({
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
   .btn {
     flex: 0 0 40px;
   }
@@ -143,7 +144,7 @@ export default defineComponent({
     padding-top: 30px;
     display: flex;
     flex: 1;
-    height: 100%;
+    height: calc(100% - 40px);
     .list {
       width: 200px;
       flex: 0 0 200px;

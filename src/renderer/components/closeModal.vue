@@ -30,7 +30,7 @@ export default defineComponent({
       lineHeight: '30px',
     })
     onMounted(() => {
-      window.ipcRenderer.on('win-close-tips', (event, data) => {
+      window.ipcRenderer.on('renderer-close-tips', (event, data) => {
         const closeChecked = LgetItem('closeChecked')
         const isMac = data.isMac
         if (closeChecked || isMac) {
@@ -42,7 +42,7 @@ export default defineComponent({
       })
     })
     onUnmounted(() => {
-      window.ipcRenderer.removeListener('win-close-tips')
+      window.ipcRenderer.removeListener('renderer-close-tips')
     })
     async function hideModal() {
       if (closeChecked.value) {

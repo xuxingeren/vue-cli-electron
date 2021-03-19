@@ -47,7 +47,7 @@ class createTray {
     if (!isMac) {
       global.tray.on('click', () => {
         if (this.count !== 0) {
-          win.webContents.send('win-message-read')
+          win.webContents.send('renderer-message-read')
         }
         winShow(win)
       })
@@ -71,7 +71,7 @@ class createTray {
         notification = new Notification(messageConfig)
         notification.once('click', () => {
           winShow(global.sharedObject.win)
-          global.sharedObject.win.webContents.send('win-message-read', messageConfig.id)
+          global.sharedObject.win.webContents.send('renderer-message-read', messageConfig.id)
           notification.close()
         })
         notification.show()

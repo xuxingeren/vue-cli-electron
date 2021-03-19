@@ -1,7 +1,9 @@
 const USER_INFO = 'USER_INFO'
 const USER_TOKEN = 'USER_TOKEN'
+const UPDATE_LIST = 'UPDATE_LIST'
 
 export {
   USER_INFO,
-  USER_TOKEN
+  USER_TOKEN,
+  UPDATE_LIST
 }

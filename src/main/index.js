@@ -59,6 +59,7 @@ function initWindow() {
     useContentSize: true,
     show: false,
     webPreferences: {
+      webSecurity: false,
       contextIsolation: false,
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       preload: path.join(__dirname, 'preload.js'),
@@ -113,7 +114,7 @@ async function onAppReady() {
   win.on('close', (e) => {
     console.log('close', willQuitApp)
     if (!willQuitApp) {
-      win.webContents.send('win-close-tips', { isMac })
+      win.webContents.send('renderer-close-tips', { isMac })
       e.preventDefault()
     }
   })

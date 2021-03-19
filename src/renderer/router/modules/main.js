@@ -3,7 +3,7 @@ import Layout from '@/Layout/index'
 export default [{
   path: '/main',
   name: 'Main',
-  redirect: '/main/tary',
+  redirect: '/main/close',
   component: Layout,
   meta: {
     title: '主线程',
