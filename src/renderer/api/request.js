@@ -51,23 +51,23 @@ axios.interceptors.response.use(res => {
   }
 }, err => {
   err.config && removePending(err.config, true)
-  let message = '请求出错，请稍后重试！'
+  let msg = '请求出错，请稍后重试！'
   if (err.message.includes('timeout')) {
-    message = '请求超时'
+    msg = '请求超时'
   } else if (err.response) {
-    message = err.response.data.message
+    msg = err.response.data.message
     switch (err.response.status) {
       case 404:
-        message = 'Not Found'
+        msg = 'Not Found'
         break
       case 400:
-        message = err.response.data.error
+        msg = err.response.data.error
         break
     }
   } else if (err.__CANCEL__) {
-    message = '请求取消'
+    msg = '请求取消'
   }
-  !err.__CANCEL__ && message.error(message)
+  !err.__CANCEL__ && message.error(msg)
   return Promise.reject(err && err.response ? err.response.data : { message, cancel: !!err.__CANCEL__ })
 })
 

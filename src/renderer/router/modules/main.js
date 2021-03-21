@@ -25,12 +25,21 @@ export default [{
       title: '托盘',
       icon: 'ProfileOutlined'
     }
-  }, {
-    path: '/main/update',
-    name: 'mainuUpdate',
-    component: () => import('@/views/main/update'),
+  }]
+}, {
+  path: '/update',
+  name: 'Update',
+  component: Layout,
+  meta: {
+    title: '更新',
+    icon: 'CloudDownloadOutlined'
+  },
+  children: [{
+    path: '/update/full',
+    name: 'updateFull',
+    component: () => import('@/views/update/full'),
     meta: {
-      title: '更新',
+      title: '全量更新',
       icon: 'CloudDownloadOutlined'
     }
   }]
