@@ -42,5 +42,13 @@ export default [{
       title: '全量更新',
       icon: 'CloudDownloadOutlined'
     }
+  }, {
+    path: '/update/increment',
+    name: 'updateIncrement',
+    component: () => import('@/views/update/increment'),
+    meta: {
+      title: '增量更新',
+      icon: 'CloudDownloadOutlined'
+    }
   }]
 }]

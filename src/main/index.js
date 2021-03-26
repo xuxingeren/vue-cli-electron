@@ -1,7 +1,7 @@
 'use strict'
 
 import { app, protocol } from 'electron'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import createProtocol from './services/createProtocol'
 // import installExtension from 'electron-devtools-installer'
 import path from 'path'
 import createWindow from './services/createWindow'
@@ -14,10 +14,10 @@ import setMenu from './config/menu'
 
 const isMac = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const resources = process.resourcesPath
 
 let win = null
 let loaderWin = null
-
 // 注册文件加载策略
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
@@ -60,6 +60,7 @@ function initWindow() {
     webPreferences: {
       webSecurity: false,
       contextIsolation: false,
+      enableRemoteModule: true,
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       preload: path.join(__dirname, 'preload.js'),
       scrollBounce: isMac
@@ -95,9 +96,8 @@ function initWindow() {
 
 async function onAppReady() {
   if (!process.env.WEBPACK_DEV_SERVER_URL) {
-    createProtocol('app')
+    createProtocol('app', path.join(resources, './app.asar.unpacked'))
   }
-
   initWindow()
 
   // if (isDevelopment && !process.env.IS_TEST) {
@@ -120,6 +120,13 @@ async function onAppReady() {
 }
 app.setAppUserModelId(config.VUE_APP_APPID)
 app.isReady() ? onAppReady() : app.on('ready', onAppReady)
+// app.whenReady().then(() => {
+//   protocol.registerFileProtocol('atom', (request, callback) => {
+//     const pathname = decodeURI(request.url.replace('atom:///', ''))
+//     const parts = pathname.split('?')
+//     callback(parts[0])
+//   })
+// })
 app.on('activate', () => win.show())
 app.on('before-quit', () => {
   console.log('before-quit')

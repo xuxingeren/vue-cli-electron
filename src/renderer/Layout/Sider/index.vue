@@ -65,7 +65,7 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
     const state = reactive({
-      openKeys: ['/main'],
+      openKeys: [route.matched[0].path],
       preOpenKeys: [route.path],
       selectedKeys: [route.path]
     })

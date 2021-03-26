@@ -7,6 +7,9 @@
           <MenuFoldOutlined v-else />
         </a-button>
       </div>
+      <div class="logo">
+        <img src="@/assets/logo.png" alt="">
+      </div>
     </div>
   </a-layout-header>
 </template>
@@ -57,6 +60,13 @@ export default defineComponent({
     .header-left {
       display: flex;
       align-items: center;
+    }
+    .logo {
+      height: 100%;
+      font-size: 0;
+      > img {
+        height: 100%;
+      }
     }
     .ant-dropdown-link {
       padding: 0 12px;

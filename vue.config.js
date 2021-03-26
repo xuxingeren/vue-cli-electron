@@ -22,6 +22,7 @@ module.exports = {
   publicPath: buildcfg.publicPath,
   outputDir: buildcfg.outputDir,
   lintOnSave: true,
+  productionSourceMap: !process.argv.includes('electron:build'),
   chainWebpack: (config) => {
     config.resolve.alias.set('@', resolve('src/renderer'))
   },
@@ -43,7 +44,7 @@ module.exports = {
     config.mode = process.env.NODE_ENV
   },
   devServer: {
-    open: false,
+    open: !process.argv.includes('electron:serve'),
     disableHostCheck: true,
     port: buildcfg.port,
   },
@@ -70,22 +71,30 @@ module.exports = {
           name: process.env.VUE_APP_APPID.split('.').pop(),
           version: process.env.VUE_APP_VERSION
         },
-        asar: true,
+        asar: false,
         directories: {
           output: "dist_electron",
           buildResources: "build",
           app: "dist_electron/bundled"
         },
+        extraResources: [{
+          from: "dist_electron/bundled",
+          to: "app.asar.unpacked",
+          filter: [
+            "!**/icons",
+            "!**/preload.js",
+            "!**/node_modules",
+            "!**/background.js"
+          ]
+        }],
         files: [
-          {
-            filter: [
-              "**"
-            ]
-          }
+          "**/icons/*",
+          "**/preload.js",
+          "**/node_modules/**/*",
+          "**/background.js"
         ],
         extends: null,
         electronVersion: "12.0.0",
-        extraResources: [],
         electronDownload: {
           mirror: "https://npm.taobao.org/mirrors/electron/"
         },
