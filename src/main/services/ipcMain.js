@@ -2,6 +2,7 @@ import { ipcMain, app } from 'electron'
 import global from '../config/global'
 import setTray from './setTray'
 import checkUpdate from './checkUpdate'
+import increment from '../utils/increment'
 
 export default function () {
   const win = global.sharedObject.win
@@ -38,5 +39,8 @@ export default function () {
   })
   ipcMain.handle('win-update', (_, data) => {
     checkUpdate(data)
+  })
+  ipcMain.handle('win-increment', (_, data) => {
+    increment(data)
   })
 }

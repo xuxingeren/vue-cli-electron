@@ -100,8 +100,6 @@ export default defineComponent({
             state.upDateData = res
             if (res.fullUpdate) {
               updateNotice(isClick)
-            } else {
-              console.log()
             }
           }).catch(err => {
             if (err.code === 0) {

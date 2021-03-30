@@ -12,6 +12,7 @@ export default (version, data) => {
           resolve()
         } else {
           console.log('增量更新')
+          resolve()
         }
         break
       case -1:

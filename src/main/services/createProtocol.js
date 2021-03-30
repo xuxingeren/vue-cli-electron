@@ -2,7 +2,6 @@ import { protocol } from 'electron'
 import * as path from 'path'
 import { readFile } from 'fs'
 import { URL } from 'url'
-import log from '../config/log.js'
 
 export default (scheme, serverPath = __dirname) => {
   protocol.registerBufferProtocol(
@@ -10,10 +9,8 @@ export default (scheme, serverPath = __dirname) => {
     (request, respond) => {
       let pathName = new URL(request.url).pathname
       pathName = decodeURI(pathName) // Needed in case URL contains spaces
-      log.info(path.join(serverPath, pathName))
       readFile(path.join(serverPath, pathName), (error, data) => {
         if (error) {
-          log.error(error)
           console.error(
             `Failed to read ${pathName} on ${scheme} protocol`,
             error

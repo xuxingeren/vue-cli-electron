@@ -71,7 +71,7 @@ module.exports = {
           name: process.env.VUE_APP_APPID.split('.').pop(),
           version: process.env.VUE_APP_VERSION
         },
-        asar: false,
+        asar: true,
         directories: {
           output: "dist_electron",
           buildResources: "build",
@@ -136,7 +136,8 @@ module.exports = {
         publish: {
           provider: "generic",
           url: "http://127.0.0.1"
-        }
+        },
+        afterPack: './afterPack.js',
       }
     }
   }

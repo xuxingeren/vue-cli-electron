@@ -26,10 +26,12 @@
   },
   "main": "background.js",
   "dependencies": {
+    "adm-zip": "^0.5.4",
     "ant-design-vue": "^2.0.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "electron-log": "^4.3.2",
+    "fs-extra": "^7.0.1",
     "mockjs": "^1.1.0",
     "qs": "^6.5.2",
     "vue": "^3.0.7",

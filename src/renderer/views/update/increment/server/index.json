@@ -1,0 +1,12 @@
+{
+  "code": 200,
+  "success": true,
+  "data": {
+    "forceUpdate": false,
+    "fullUpdate": false,
+    "upDateUrl": "http://127.0.0.1:4000/unpacked.zip",
+    "restart": false,
+    "message": "我要升级成0.0.2",
+    "version": "0.0.2"
+  }
+}
