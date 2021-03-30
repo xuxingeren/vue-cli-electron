@@ -17,6 +17,7 @@ export default (data) => {
         reduction(unpackedPath)
         return
       }
+      fse.removeSync(filePath)
       if (data.restart) {
         reLoad(true)
       } else {
