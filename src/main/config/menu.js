@@ -1,5 +1,6 @@
 import { app, dialog, Menu } from 'electron'
 import config from './index'
+import global from './global'
 const os = require('os')
 const isMac = process.platform === 'darwin'
 
@@ -37,7 +38,8 @@ function info() {
     title: '关于',
     type: 'info',
     message: 'vue-cli-electron',
-    detail: `版本信息：\nelectron版本：${process.versions.electron}\n当前系统：${os.type()} ${os.arch()} ${os.release()}\n当前版本：${process.env.VUE_APP_ENV}，${process.env.VUE_APP_VERSION}`,
+    // detail: `版本信息：\nelectron版本：${process.versions.electron}\n当前系统：${os.type()} ${os.arch()} ${os.release()}\n当前版本：${process.env.VUE_APP_ENV}，${process.env.VUE_APP_VERSION}`,
+    detail: `版本信息：\nelectron版本：${process.versions.electron}\n当前系统：${os.type()} ${os.arch()} ${os.release()}\n当前版本：${global.envConfig.VUE_APP_ENV}，${global.envConfig.VUE_APP_VERSION}`,
     noLink: true,
     buttons: ['确定']
   })

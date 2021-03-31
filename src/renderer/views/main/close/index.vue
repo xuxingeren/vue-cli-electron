@@ -7,11 +7,9 @@
 <script>
 import { defineComponent } from 'vue'
 import { LreItem } from '@/utils/storage'
-import cfg from '@/config'
 
 export default defineComponent({
   setup() {
-    console.log(cfg)
     function clear() {
       LreItem('closeChecked')
     }

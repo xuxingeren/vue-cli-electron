@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import cfg from '@/config'
 import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN"
 import { defineComponent } from 'vue'
 import closeModal from '@/components/closeModal'
@@ -17,6 +18,8 @@ export default defineComponent({
     closeModal
   },
   setup() {
+    console.log(cfg)
+    window.ipcRenderer.invoke('win-envConfig', cfg)
     return {
       zh_CN
     }

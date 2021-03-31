@@ -43,4 +43,7 @@ export default function () {
   ipcMain.handle('win-increment', (_, data) => {
     increment(data)
   })
+  ipcMain.handle('win-envConfig', (_, data) => {
+    global.envConfig = data
+  })
 }
