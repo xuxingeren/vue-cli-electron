@@ -81,18 +81,25 @@ module.exports = {
           from: "dist_electron/bundled",
           to: "app.asar.unpacked",
           filter: [
-            "!**/icons",
-            "!**/preload.js",
-            "!**/node_modules",
-            "!**/background.js"
+            "child.js"
           ]
         }],
-        files: [
-          "**/icons/*",
-          "**/preload.js",
-          "**/node_modules/**/*",
-          "**/background.js"
-        ],
+        // extraResources: [{
+        //   from: "dist_electron/bundled",
+        //   to: "app.asar.unpacked",
+        //   filter: [
+        //     "!**/icons",
+        //     "!**/preload.js",
+        //     "!**/node_modules",
+        //     "!**/background.js"
+        //   ]
+        // }],
+        // files: [
+        //   "**/icons/*",
+        //   "**/preload.js",
+        //   "**/node_modules/**/*",
+        //   "**/background.js"
+        // ],
         extends: null,
         electronVersion: "12.0.0",
         electronDownload: {

@@ -11,10 +11,12 @@ import ipcMain from './services/ipcMain'
 import config from './config/index'
 import global from './config/global'
 import setMenu from './config/menu'
+const { spawn } = require('child_process')
+import log from './config/log.js'
 
 const isMac = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-const resources = process.resourcesPath
+const resourcesPath = process.resourcesPath
 
 let win = null
 let loaderWin = null
@@ -96,7 +98,8 @@ function initWindow() {
 
 async function onAppReady() {
   if (!process.env.WEBPACK_DEV_SERVER_URL) {
-    createProtocol('app', path.join(resources, './app.asar.unpacked'))
+    // createProtocol('app', path.join(resourcesPath, './app.asar.unpacked'))
+    createProtocol('app')
   }
   initWindow()
 
@@ -134,6 +137,22 @@ app.on('before-quit', () => {
 })
 app.on('quit', () => {
   console.log('quit')
+  const obj = {
+    resourcesPath,
+    exePath: app.getPath('exe'),
+    logPath: app.getPath('logs')
+  }
+  const child = spawn('node', [path.join(process.resourcesPath,  './app.asar.unpacked/child.js'), JSON.stringify(obj)], {
+    detached: true,
+    stdio: 'ignore'
+  })
+  child.unref()
+  child.on('error', (data) => {
+    log.error('error', data)
+  })
+  child.on('exit', (code) => {
+    log.info(`子进程退出，退出码 ${code}`)
+  })
 })
 app.on('window-all-closed', () => {
   console.log('window-all-closed')
