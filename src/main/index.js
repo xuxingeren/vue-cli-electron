@@ -12,7 +12,7 @@ import config from './config/index'
 import global from './config/global'
 import setMenu from './config/menu'
 const { spawn } = require('child_process')
-import log from './config/log.js'
+const fs = require('fs')
 
 const isMac = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -139,20 +139,16 @@ app.on('quit', () => {
   console.log('quit')
   const obj = {
     resourcesPath,
-    exePath: app.getPath('exe'),
-    logPath: app.getPath('logs')
+    exePath: app.getPath('exe')
   }
+  const logPath = app.getPath('logs')
+  const out = fs.openSync(path.join(logPath, './out.log'), 'a');
+  const err = fs.openSync(path.join(logPath, './err.log'), 'a');
   const child = spawn('node', [path.join(process.resourcesPath,  './app.asar.unpacked/child.js'), JSON.stringify(obj)], {
     detached: true,
-    stdio: 'ignore'
+    stdio: ['ignore', out, err]
   })
   child.unref()
-  child.on('error', (data) => {
-    log.error('error', data)
-  })
-  child.on('exit', (code) => {
-    log.info(`子进程退出，退出码 ${code}`)
-  })
 })
 app.on('window-all-closed', () => {
   console.log('window-all-closed')
