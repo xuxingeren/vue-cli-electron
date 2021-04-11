@@ -81,7 +81,7 @@ module.exports = {
           from: "dist_electron/bundled",
           to: "app.asar.unpacked",
           filter: [
-            "child.js"
+            "update.bat"
           ]
         }],
         // extraResources: [{

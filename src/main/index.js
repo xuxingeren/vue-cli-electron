@@ -137,18 +137,21 @@ app.on('before-quit', () => {
 })
 app.on('quit', () => {
   console.log('quit')
-  const obj = {
-    resourcesPath,
-    exePath: app.getPath('exe')
-  }
   const logPath = app.getPath('logs')
-  const out = fs.openSync(path.join(logPath, './out.log'), 'a');
-  const err = fs.openSync(path.join(logPath, './err.log'), 'a');
-  const child = spawn('node', [path.join(process.resourcesPath,  './app.asar.unpacked/child.js'), JSON.stringify(obj)], {
+  const out = fs.openSync(path.join(logPath, './out.log'), 'a')
+  const err = fs.openSync(path.join(logPath, './err.log'), 'a')
+  const child = spawn(path.join(process.resourcesPath,  './app.asar.unpacked/update.bat'), [resourcesPath, app.getPath('exe')], {
     detached: true,
+    shell: true,
     stdio: ['ignore', out, err]
-  })
-  child.unref()
+})
+child.unref()
+  // const child = spawn(path.join(process.resourcesPath,  './app.asar.unpacked/update.bat'), [JSON.stringify(obj)], {
+  //   detached: true,
+  //   shell: process.platform === 'win32',
+  //   stdio: ['ignore', out, err]
+  // })
+  // child.unref()
 })
 app.on('window-all-closed', () => {
   console.log('window-all-closed')
