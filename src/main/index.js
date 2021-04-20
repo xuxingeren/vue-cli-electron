@@ -12,6 +12,7 @@ import config from './config/index'
 import global from './config/global'
 import setMenu from './config/menu'
 const { spawn } = require('child_process')
+const fse = require('fs-extra')
 const fs = require('fs')
 
 const isMac = process.platform === 'darwin'
@@ -137,21 +138,17 @@ app.on('before-quit', () => {
 })
 app.on('quit', () => {
   console.log('quit')
-  const logPath = app.getPath('logs')
-  const out = fs.openSync(path.join(logPath, './out.log'), 'a')
-  const err = fs.openSync(path.join(logPath, './err.log'), 'a')
-  const child = spawn(path.join(process.resourcesPath,  './app.asar.unpacked/update.bat'), [resourcesPath, app.getPath('exe')], {
-    detached: true,
-    shell: true,
-    stdio: ['ignore', out, err]
-})
-child.unref()
-  // const child = spawn(path.join(process.resourcesPath,  './app.asar.unpacked/update.bat'), [JSON.stringify(obj)], {
-  //   detached: true,
-  //   shell: process.platform === 'win32',
-  //   stdio: ['ignore', out, err]
-  // })
-  // child.unref()
+  if (fse.pathExistsSync(path.join(app.getPath('userData'), './update.exe')) && fse.pathExistsSync(path.join(resourcesPath, './update.asar'))) {
+    const logPath = app.getPath('logs')
+    const out = fs.openSync(path.join(logPath, './out.log'), 'a')
+    const err = fs.openSync(path.join(logPath, './err.log'), 'a')
+    const child = spawn(`"${path.join(app.getPath('userData'), './update.exe')}"`, [`"${resourcesPath}"`, `"${app.getPath('exe')}"`], {
+      detached: true,
+      shell: true,
+      stdio: ['ignore', out, err]
+    })
+    child.unref()
+  }
 })
 app.on('window-all-closed', () => {
   console.log('window-all-closed')

@@ -77,13 +77,6 @@ module.exports = {
           buildResources: "build",
           app: "dist_electron/bundled"
         },
-        extraResources: [{
-          from: "dist_electron/bundled",
-          to: "app.asar.unpacked",
-          filter: [
-            "update.bat"
-          ]
-        }],
         // extraResources: [{
         //   from: "dist_electron/bundled",
         //   to: "app.asar.unpacked",

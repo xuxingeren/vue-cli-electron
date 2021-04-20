@@ -56,21 +56,25 @@
 import downloadFile from './downloadFile'
 import { app } from 'electron'
 const fse = require('fs-extra')
+const path = require('path')
 const AdmZip = require('adm-zip')
 
-export default (data) => {
+export default async (data) => {
   const resourcesPath = process.resourcesPath
-  downloadFile({ url: data.upDateUrl, targetPath: resourcesPath }).then(async (filePath) => {
-    const zip = new AdmZip(filePath)
-    zip.extractAllToAsync(resourcesPath, true, (err) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      fse.removeSync(filePath)
-      app.exit(0)
+    if (!fse.pathExistsSync(path.join(app.getPath('userData'), './update.exe'))) {
+      await downloadFile({ url: data.upDateExe, targetPath: app.getPath('userData') })
+    }
+    downloadFile({ url: data.upDateUrl, targetPath: resourcesPath }).then(async (filePath) => {
+      const zip = new AdmZip(filePath)
+      zip.extractAllToAsync(resourcesPath, true, (err) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        fse.removeSync(filePath)
+        app.exit(0)
+      })
+    }).catch(err => {
+      console.log(err)
     })
-  }).catch(err => {
-    console.log(err)
-  })
 }
