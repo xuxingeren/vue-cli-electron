@@ -2,7 +2,8 @@ global.tray = null
 global.willQuitApp = false
 global.envConfig = {}
 global.sharedObject = {
-  win: ''
+  win: '',
+  subScreen: ''
 }
 
 export default global

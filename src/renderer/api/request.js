@@ -68,7 +68,7 @@ axios.interceptors.response.use(res => {
     msg = '请求取消'
   }
   !err.__CANCEL__ && message.error(msg)
-  return Promise.reject(err && err.response ? err.response.data : { message, cancel: !!err.__CANCEL__ })
+  return Promise.reject(err && err.response ? err.response.data : { message: msg, cancel: !!err.__CANCEL__ })
 })
 
 export default function (options) {

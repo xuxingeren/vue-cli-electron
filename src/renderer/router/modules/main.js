@@ -25,30 +25,13 @@ export default [{
       title: '托盘',
       icon: 'ProfileOutlined'
     }
-  }]
-}, {
-  path: '/update',
-  name: 'Update',
-  component: Layout,
-  meta: {
-    title: '更新',
-    icon: 'CloudDownloadOutlined'
-  },
-  children: [{
-    path: '/update/full',
-    name: 'updateFull',
-    component: () => import('@/views/update/full'),
-    meta: {
-      title: '全量更新',
-      icon: 'CloudDownloadOutlined'
-    }
   }, {
-    path: '/update/increment',
-    name: 'updateIncrement',
-    component: () => import('@/views/update/increment'),
+    path: '/main/subScreen',
+    name: 'mainSubScreen',
+    component: () => import('@/views/main/subScreen'),
     meta: {
-      title: '增量更新',
-      icon: 'CloudDownloadOutlined'
+      title: '窗口通信与拓展屏',
+      icon: 'BlockOutlined'
     }
   }]
 }]
