@@ -1,4 +1,4 @@
-import { ipcMain, app, screen } from 'electron'
+import { ipcMain, app, screen, globalShortcut } from 'electron'
 import global from '../config/global'
 import setTray from './setTray'
 import checkUpdate from './checkUpdate'
@@ -47,6 +47,15 @@ export default function () {
   })
   ipcMain.handle('win-envConfig', (_, data) => {
     global.envConfig = data
+  })
+  ipcMain.handle('win-globalShortcut', (_, data) => {
+    if (data) {
+      globalShortcut.register('Ctrl+F', () => {
+        win.webContents.send('renderer-globalShortcut', 'Ctrl+F')
+      })
+    } else {
+      globalShortcut.unregister('Ctrl+F')
+    }
   })
   ipcMain.handle('win-subScreen-message', (_, data) => {
     if (global.sharedObject.subScreen) {

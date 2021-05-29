@@ -8,6 +8,7 @@ import createWindow from './services/createWindow'
 import winSingle from './services/winSingle'
 import setTray from './services/setTray'
 import ipcMain from './services/ipcMain'
+import { register, unregisterAll } from './services/shortcut'
 import config from './config/index'
 import global from './config/global'
 import setMenu from './config/menu'
@@ -61,6 +62,8 @@ function initWindow() {
     useContentSize: true,
     show: false,
     webPreferences: {
+      // nodeIntegrationInSubFrames: true,
+      webviewTag: true,
       webSecurity: false,
       contextIsolation: false,
       enableRemoteModule: true,
@@ -69,7 +72,6 @@ function initWindow() {
       scrollBounce: isMac
     }
   }, '', 'index.html')
-
   global.sharedObject.win = win
   ipcMain()
   setMenu(win)
@@ -77,6 +79,9 @@ function initWindow() {
   win.once('ready-to-show', () => {
     loaderWin && loaderWin.destroy()
     win.show()
+    register(win, 'Ctrl+A', () => {
+      win.webContents.send('renderer-localshortcut', 'Ctrl+A')
+    })
   })
   win.on('enter-full-screen', () => {
     isMac && app.commandLine.appendSwitch('disable-pinch', true)
@@ -88,6 +93,8 @@ function initWindow() {
     if (input.type === 'keyUp') {
       if (input.key.toLowerCase() === 'f11') {
         win.setFullScreen(!win.isFullScreen())
+      } else {
+        win.webContents.send('renderer-before-input-event', input.key)
       }
     }
   })
@@ -119,6 +126,8 @@ async function onAppReady() {
     if (!global.willQuitApp) {
       win.webContents.send('renderer-close-tips', { isMac })
       e.preventDefault()
+    } else {
+      unregisterAll(win)
     }
   })
 }

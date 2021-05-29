@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import routes from './modules'
 import page from './page'
 import store from '../store'
-console.log(routes, 6666)
+
 const router = createRouter({
   history: process.env.IS_ELECTRON ? createWebHashHistory(process.env.BASE_URL) : createWebHistory(process.env.BASE_URL),
   fallback: false,
