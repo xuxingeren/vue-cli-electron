@@ -12,6 +12,7 @@ import { register, unregisterAll } from './services/shortcut'
 import config from './config/index'
 import global from './config/global'
 import setMenu from './config/menu'
+import downloadFile from './services/downloadFile'
 const { spawn } = require('child_process')
 const fse = require('fs-extra')
 const fs = require('fs')
@@ -75,6 +76,7 @@ function initWindow() {
   global.sharedObject.win = win
   ipcMain()
   setMenu(win)
+  downloadFile(win)
   setTray.init(win)
   win.once('ready-to-show', () => {
     loaderWin && loaderWin.destroy()
@@ -133,13 +135,12 @@ async function onAppReady() {
 }
 app.setAppUserModelId(config.VUE_APP_APPID)
 app.isReady() ? onAppReady() : app.on('ready', onAppReady)
-// app.whenReady().then(() => {
-//   protocol.registerFileProtocol('atom', (request, callback) => {
-//     const pathname = decodeURI(request.url.replace('atom:///', ''))
-//     const parts = pathname.split('?')
-//     callback(parts[0])
-//   })
-// })
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('atom', (request, callback) => {
+    const url = request.url.substr(7)
+    callback(decodeURI(path.normalize(url)))
+  })
+})
 app.on('activate', () => win.show())
 app.on('before-quit', () => {
   console.log('before-quit')
