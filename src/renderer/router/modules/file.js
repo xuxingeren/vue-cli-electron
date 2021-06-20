@@ -17,5 +17,13 @@ export default [{
 			title: '本地文件',
 			icon: 'FileImageOutlined'
 		}
+	}, {
+		path: '/file/extensions',
+		name: 'Extensions',
+		component: () => import('@/views/file/extensions'),
+		meta: {
+			title: '拓展展示',
+			icon: 'PartitionOutlined'
+		}
 	}]
 }]

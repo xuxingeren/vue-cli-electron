@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
 import { defineComponent } from 'vue'
 import { LreItem } from '@/utils/storage'
 

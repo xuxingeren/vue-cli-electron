@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol } from 'electron'
+import { app, protocol, session } from 'electron'
 import createProtocol from './services/createProtocol'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
@@ -34,20 +34,24 @@ if (config.winSingle) {
 
 function initWindow() {
   if (config.loading) {
-    loaderWin = createWindow({
-      width: 400,
-      height: 600,
-      frame: false,
-      backgroundColor: '#222',
-      show: false,
-      transparent: true,
-      skipTaskbar: true,
-      resizable: false,
-      webPreferences: {
-        experimentalFeatures: true,
-        contextIsolation: false
-      }
-    }, 'loader', 'loader.html')
+    loaderWin = createWindow(
+      {
+        width: 400,
+        height: 600,
+        frame: false,
+        backgroundColor: '#222',
+        show: false,
+        transparent: true,
+        skipTaskbar: true,
+        resizable: false,
+        webPreferences: {
+          experimentalFeatures: true,
+          contextIsolation: false
+        }
+      },
+      'loader',
+      'loader.html'
+    )
     loaderWin.once('ready-to-show', () => {
       loaderWin.show()
     })
@@ -55,24 +59,29 @@ function initWindow() {
       loaderWin = null
     })
   }
-  win = createWindow({
-    height: 810,
-    minHeight: !isMac && process.env.VUE_APP_ENV === 'production' ? 810 - 20 : 810,
-    width: 1440,
-    minWidth: 1440,
-    useContentSize: true,
-    show: false,
-    webPreferences: {
-      // nodeIntegrationInSubFrames: true,
-      webviewTag: true,
-      webSecurity: false,
-      contextIsolation: false,
-      enableRemoteModule: true,
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      preload: path.join(__dirname, 'preload.js'),
-      scrollBounce: isMac
-    }
-  }, '', 'index.html')
+  win = createWindow(
+    {
+      height: 810,
+      minHeight:
+        !isMac && process.env.VUE_APP_ENV === 'production' ? 810 - 20 : 810,
+      width: 1440,
+      minWidth: 1440,
+      useContentSize: true,
+      show: false,
+      webPreferences: {
+        // nodeIntegrationInSubFrames: true,
+        webviewTag: true,
+        webSecurity: false,
+        contextIsolation: false,
+        enableRemoteModule: true,
+        nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+        preload: path.join(__dirname, 'preload.js'),
+        scrollBounce: isMac
+      }
+    },
+    '',
+    'index.html'
+  )
   global.sharedObject.win = win
   ipcMain()
   setMenu(win)
@@ -113,27 +122,29 @@ async function onAppReady() {
   }
   if (isDevelopment && !process.env.IS_TEST) {
     try {
-      // await installExtension({
-      //   id: 'ljjemllljcmogpfapbkkighbhhppjdbg',
-      //   electron: '>=1.2.1'
-      // })
-      console.log(VUEJS3_DEVTOOLS)
+      // await session.defaultSession.loadExtension(
+      //   path.join(
+      //     app.getPath('userData'),
+      //     '/extensions/chklaanhfefbnpoihckbnefhakgolnmc/0.0.32.3_0'
+      //   ),
+      //   // allowFileAccess is required to load the devtools extension on file:// URLs.
+      //   { allowFileAccess: true }
+      // )
       await installExtension(VUEJS3_DEVTOOLS)
-      console.log(6666666)
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
+    initWindow()
+    win.on('close', (e) => {
+      console.log('close', global.willQuitApp)
+      if (!global.willQuitApp) {
+        win.webContents.send('renderer-close-tips', { isMac })
+        e.preventDefault()
+      } else {
+        unregisterAll(win)
+      }
+    })
   }
-  initWindow()
-  win.on('close', (e) => {
-    console.log('close', global.willQuitApp)
-    if (!global.willQuitApp) {
-      win.webContents.send('renderer-close-tips', { isMac })
-      e.preventDefault()
-    } else {
-      unregisterAll(win)
-    }
-  })
 }
 app.setAppUserModelId(config.VUE_APP_APPID)
 app.isReady() ? onAppReady() : app.on('ready', onAppReady)
@@ -150,15 +161,22 @@ app.on('before-quit', () => {
 })
 app.on('quit', () => {
   console.log('quit')
-  if (fse.pathExistsSync(path.join(app.getPath('userData'), './update.exe')) && fse.pathExistsSync(path.join(resourcesPath, './update.asar'))) {
+  if (
+    fse.pathExistsSync(path.join(app.getPath('userData'), './update.exe')) &&
+    fse.pathExistsSync(path.join(resourcesPath, './update.asar'))
+  ) {
     const logPath = app.getPath('logs')
     const out = fs.openSync(path.join(logPath, './out.log'), 'a')
     const err = fs.openSync(path.join(logPath, './err.log'), 'a')
-    const child = spawn(`"${path.join(app.getPath('userData'), './update.exe')}"`, [`"${resourcesPath}"`, `"${app.getPath('exe')}"`], {
-      detached: true,
-      shell: true,
-      stdio: ['ignore', out, err]
-    })
+    const child = spawn(
+      `"${path.join(app.getPath('userData'), './update.exe')}"`,
+      [`"${resourcesPath}"`, `"${app.getPath('exe')}"`],
+      {
+        detached: true,
+        shell: true,
+        stdio: ['ignore', out, err]
+      }
+    )
     child.unref()
   }
 })

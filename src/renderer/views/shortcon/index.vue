@@ -75,7 +75,6 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('keyup', handleKeyPress, true)
 			Mousetrap.unbind('ctrl+k')
-			console.log()
 			webviewRef.value && webviewRef.value.removeEventListener('ipc-message', webMessage)
       window.ipcRenderer.removeAllListeners('renderer-globalShortcut')
 			window.ipcRenderer.removeAllListeners('renderer-localshortcut')

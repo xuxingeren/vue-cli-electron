@@ -1,0 +1,25 @@
+{
+   "background": {
+      "scripts": [ "background.js" ]
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "content.js" ],
+      "matches": [ "http://*/*", "https://*/*", "ftp://*/*", "file:///*" ],
+      "run_at": "document_end"
+   } ],
+   "description": "Validate and view JSON documents",
+   "icons": {
+      "128": "jsonview128.png",
+      "16": "jsonview16.png",
+      "48": "jsonview48.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsTeRKuxevWiein7geQszhb8mHRpLByZbXX8tR0m1GPBkN8SN9xgo7NijAYAqa3H5rGuDmNZm2k7UzdlVfC5+gO6uf/rVOPx7kHJNQBQaBuWUEd4KHLWa3jOy+mllD72TwXNdtJJdX6TWf115SGHlLzZRg7S47dke6KTZI6O8gcQIDAQAB",
+   "manifest_version": 2,
+   "name": "JSONView",
+   "options_page": "options.html",
+   "permissions": [ "clipboardWrite", "http://*/", "contextMenus", "https://*/", "ftp://*/" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.0.32.3",
+   "web_accessible_resources": [ "jsonview.css", "jsonview-core.css", "content_error.css", "options.png", "close_icon.gif", "error.gif" ]
+}
