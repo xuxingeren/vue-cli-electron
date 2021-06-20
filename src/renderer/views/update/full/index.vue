@@ -90,7 +90,7 @@ export default defineComponent({
       })
     })
     onUnmounted(() => {
-      window.ipcRenderer.removeListener('renderer-updateMsg')
+      window.ipcRenderer.removeAllListeners('renderer-updateMsg')
     })
     function upDateClick(isClick) {
       api('http://localhost:4000/index.json', {}, { method: 'get' }).then(res => {

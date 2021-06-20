@@ -2,7 +2,7 @@
 
 import { app, protocol } from 'electron'
 import createProtocol from './services/createProtocol'
-// import installExtension from 'electron-devtools-installer'
+import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
 import createWindow from './services/createWindow'
 import winSingle from './services/winSingle'
@@ -111,18 +111,20 @@ async function onAppReady() {
     // createProtocol('app', path.join(resourcesPath, './app.asar.unpacked'))
     createProtocol('app')
   }
+  if (isDevelopment && !process.env.IS_TEST) {
+    try {
+      // await installExtension({
+      //   id: 'ljjemllljcmogpfapbkkighbhhppjdbg',
+      //   electron: '>=1.2.1'
+      // })
+      console.log(VUEJS3_DEVTOOLS)
+      await installExtension(VUEJS3_DEVTOOLS)
+      console.log(6666666)
+    } catch (e) {
+      console.error('Vue Devtools failed to install:', e.toString())
+    }
+  }
   initWindow()
-
-  // if (isDevelopment && !process.env.IS_TEST) {
-  //   try {
-  //     await installExtension({
-  //       id: 'ljjemllljcmogpfapbkkighbhhppjdbg',
-  //       electron: '>=1.2.1'
-  //     })
-  //   } catch (e) {
-  //     console.error('Vue Devtools failed to install:', e.toString())
-  //   }
-  // }
   win.on('close', (e) => {
     console.log('close', global.willQuitApp)
     if (!global.willQuitApp) {

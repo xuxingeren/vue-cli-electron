@@ -69,7 +69,7 @@ export default defineComponent({
       })
     })
     onUnmounted(() => {
-      window.ipcRenderer.removeListener('renderer-message-read')
+      window.ipcRenderer.removeAllListeners('renderer-message-read')
     })
     const news = computed(() => state.list.reduce((pre, cur) => pre + cur.news, 0))
     const messageList = computed(() => state.list.find(s => s.id === state.activeId)['newsList'])

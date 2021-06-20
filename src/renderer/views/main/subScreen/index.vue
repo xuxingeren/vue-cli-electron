@@ -46,7 +46,7 @@ export default defineComponent({
       })
     })
     onUnmounted(() => {
-      window.ipcRenderer.removeListener('subScree-main')
+      window.ipcRenderer.removeAllListeners('subScree-main')
     })
     return {
       openScreen,

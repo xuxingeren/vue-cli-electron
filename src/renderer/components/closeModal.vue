@@ -42,7 +42,7 @@ export default defineComponent({
       })
     })
     onUnmounted(() => {
-      window.ipcRenderer.removeListener('renderer-close-tips')
+      window.ipcRenderer.removeAllListeners('renderer-close-tips')
     })
     async function hideModal() {
       if (closeChecked.value) {

@@ -48,7 +48,7 @@
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
     "electron": "^12.0.0",
-    "electron-devtools-installer": "^3.1.0",
+    "electron-devtools-installer": "^3.2.0",
     "electron-icon-builder": "^2.0.1",
     "electron-updater": "^4.3.8",
     "eslint": "^6.7.2",

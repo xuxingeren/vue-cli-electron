@@ -23,8 +23,8 @@ export default defineComponent({
       })
     })
     onUnmounted(() => {
-      window.ipcRenderer.removeListener('renderer-subScreen-message')
-      window.ipcRenderer.removeListener('main-subScree')
+      window.ipcRenderer.removeAllListeners('renderer-subScreen-message')
+      window.ipcRenderer.removeAllListeners('main-subScree')
     })
     return {
       state
