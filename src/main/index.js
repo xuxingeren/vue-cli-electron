@@ -134,7 +134,8 @@ async function onAppReady() {
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
-    initWindow()
+  }
+  initWindow()
     win.on('close', (e) => {
       console.log('close', global.willQuitApp)
       if (!global.willQuitApp) {
@@ -144,7 +145,6 @@ async function onAppReady() {
         unregisterAll(win)
       }
     })
-  }
 }
 app.setAppUserModelId(config.VUE_APP_APPID)
 app.isReady() ? onAppReady() : app.on('ready', onAppReady)
