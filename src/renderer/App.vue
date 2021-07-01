@@ -10,7 +10,7 @@
 <script>
 import cfg from '@/config'
 import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN"
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, onUnmounted } from 'vue'
 import closeModal from '@/components/closeModal'
 
 export default defineComponent({
@@ -20,6 +20,19 @@ export default defineComponent({
   setup() {
     console.log(cfg)
     window.ipcRenderer.invoke('win-envConfig', cfg)
+    onMounted(() => {
+      window.ipcRenderer.on('renderer-scheme', (_event, data) => {
+        console.log(data)
+        const urlObj = new URL(data)
+        urlObj.searchParams.forEach(s => {
+          console.log(s)
+        })
+        console.log(urlObj)
+      })
+    })
+    onUnmounted(() => {
+      window.ipcRenderer.removeAllListeners('renderer-scheme')
+    })
     return {
       zh_CN
     }

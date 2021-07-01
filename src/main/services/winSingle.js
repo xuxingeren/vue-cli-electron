@@ -7,8 +7,10 @@ export default function() {
   if (!gotTheLock) {
     app.quit()
   } else {
-    app.on('second-instance', () => {
+    app.on('second-instance', (event, argv) => {
+      console.log(argv)
       const win = global.sharedObject.win
+      win.webContents.send('renderer-scheme', argv[argv.length - 1])
       if (win) {
         if (win.isMinimized()) win.restore()
         if (win.isVisible()) {

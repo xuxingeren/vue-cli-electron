@@ -21,6 +21,14 @@ const isMac = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const resourcesPath = process.resourcesPath
 
+if (app.isPackaged) {
+  app.setAsDefaultProtocolClient('vue-cli-electron')
+} else {
+  app.setAsDefaultProtocolClient('vue-cli-electron', process.execPath, [
+    path.resolve(process.argv[1])
+  ])
+}
+
 let win = null
 let loaderWin = null
 // 注册文件加载策略
@@ -120,31 +128,36 @@ async function onAppReady() {
     // createProtocol('app', path.join(resourcesPath, './app.asar.unpacked'))
     createProtocol('app')
   }
-  if (isDevelopment && !process.env.IS_TEST) {
-    try {
-      // await session.defaultSession.loadExtension(
-      //   path.join(
-      //     app.getPath('userData'),
-      //     '/extensions/chklaanhfefbnpoihckbnefhakgolnmc/0.0.32.3_0'
-      //   ),
-      //   // allowFileAccess is required to load the devtools extension on file:// URLs.
-      //   { allowFileAccess: true }
-      // )
-      await installExtension(VUEJS3_DEVTOOLS)
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
-    }
-  }
+  // if (isDevelopment && !process.env.IS_TEST) {
+  //   try {
+  //     // await session.defaultSession.loadExtension(
+  //     //   path.join(
+  //     //     app.getPath('userData'),
+  //     //     '/extensions/chklaanhfefbnpoihckbnefhakgolnmc/0.0.32.3_0'
+  //     //   ),
+  //     //   // allowFileAccess is required to load the devtools extension on file:// URLs.
+  //     //   { allowFileAccess: true }
+  //     // )
+  //     await installExtension(VUEJS3_DEVTOOLS)
+  //   } catch (e) {
+  //     console.error('Vue Devtools failed to install:', e.toString())
+  //   }
+  // }
   initWindow()
-    win.on('close', (e) => {
-      console.log('close', global.willQuitApp)
-      if (!global.willQuitApp) {
-        win.webContents.send('renderer-close-tips', { isMac })
-        e.preventDefault()
-      } else {
-        unregisterAll(win)
-      }
-    })
+  win.webContents.once('did-finish-load', () => {
+    if (process.argv.length > (app.isPackaged ? 1 : 2)) {
+      app.emit('second-instance', null, process.argv)
+    }
+  })
+  win.on('close', (e) => {
+    console.log('close', global.willQuitApp)
+    if (!global.willQuitApp) {
+      win.webContents.send('renderer-close-tips', { isMac })
+      e.preventDefault()
+    } else {
+      unregisterAll(win)
+    }
+  })
 }
 app.setAppUserModelId(config.VUE_APP_APPID)
 app.isReady() ? onAppReady() : app.on('ready', onAppReady)
