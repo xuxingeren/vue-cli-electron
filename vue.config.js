@@ -116,6 +116,10 @@ module.exports = {
         mac: {
           icon: "public/icons/icon.icns"
         },
+        protocols: [{
+          name: 'vue-cli-electron',
+          schemes: ['vue-cli-electron']
+        }],
         nsis: {
           oneClick: false,
           perMachine: true,
@@ -123,7 +127,8 @@ module.exports = {
           warningsAsErrors: false,
           allowElevation: false,
           createDesktopShortcut: true,
-          createStartMenuShortcut: true
+          createStartMenuShortcut: true,
+          include: "installer.nsh"
         },
         win: {
           target: "nsis",

@@ -2,7 +2,7 @@
 
 import { app, protocol, session } from 'electron'
 import createProtocol from './services/createProtocol'
-import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
+// import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
 import createWindow from './services/createWindow'
 import winSingle from './services/winSingle'
@@ -21,13 +21,13 @@ const isMac = process.platform === 'darwin'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const resourcesPath = process.resourcesPath
 
-if (app.isPackaged) {
-  app.setAsDefaultProtocolClient('vue-cli-electron')
-} else {
-  app.setAsDefaultProtocolClient('vue-cli-electron', process.execPath, [
-    path.resolve(process.argv[1])
-  ])
-}
+// if (app.isPackaged) {
+//   app.setAsDefaultProtocolClient('vue-cli-electron')
+// } else {
+//   app.setAsDefaultProtocolClient('vue-cli-electron', process.execPath, [
+//     path.resolve(process.argv[1])
+//   ])
+// }
 
 let win = null
 let loaderWin = null
@@ -166,6 +166,21 @@ app.whenReady().then(() => {
     const url = request.url.substr(7)
     callback(decodeURI(path.normalize(url)))
   })
+})
+app.on('open-url', (_event, urlStr) => {
+  console.log(urlStr)
+  if (win) {
+    win.webContents.send('renderer-scheme', urlStr)
+    if (win.isMinimized()) win.restore()
+    if (win.isVisible()) {
+      win.focus()
+    } else {
+      win.show()
+      win.setSkipTaskbar(false)
+    }
+  } else {
+    process.argv.push(urlStr)
+  }
 })
 app.on('activate', () => win.show())
 app.on('before-quit', () => {

@@ -24,9 +24,6 @@ export default defineComponent({
       window.ipcRenderer.on('renderer-scheme', (_event, data) => {
         console.log(data)
         const urlObj = new URL(data)
-        urlObj.searchParams.forEach(s => {
-          console.log(s)
-        })
         console.log(urlObj)
       })
     })

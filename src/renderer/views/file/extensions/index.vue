@@ -26,7 +26,7 @@ export default defineComponent({
     function customRequest(fileData) {
       const path = fileData.file.path
       if (remote.session.defaultSession.getExtension('chklaanhfefbnpoihckbnefhakgolnmc')) {
-        window.open(path)
+        window.open('file:///' + path)
       } else {
         $message.warning('没有加载json拓展')
       }
