@@ -1,7 +1,7 @@
 <template>
   <div class="localFile">
     <div class="header">
-      <a-button type="primary" @click="download">点击下载图片</a-button>
+      <a-button type="primary" @click="download('https://xuxinblog.oss-cn-qingdao.aliyuncs.com/blog/2021/04/22/1.png')">点击下载图片</a-button>
       <a-upload
         :customRequest="customRequest"
         name="file"
@@ -42,28 +42,28 @@
         </div>
       </div>
     </div>
-    <audio :src="state.audio" controls>
-    </audio>
+    <audio :src="state.audio" controls></audio>
   </div>
 </template>
 
 <script>
 import WaveSurfer from 'wavesurfer.js'
+import { useRoute } from 'vue-router'
 import { defineComponent, onMounted, onUnmounted, reactive } from 'vue'
 import { LgetItem, LsetItem } from '@/utils/storage'
 
 export default defineComponent({
   setup() {
+    const route = useRoute()
     const state = reactive({
       image: '',
       audio: '',
       wavesurfer: null,
       audioStatus: 'loading',
     })
-    function download() {
+    function download(url) {
       window.ipcRenderer.invoke('start-download', {
-        downloadUrl:
-          'https://xuxinblog.oss-cn-qingdao.aliyuncs.com/blog/2021/04/22/1.png',
+        downloadUrl: url,
         folder: '',
       })
     }
@@ -90,8 +90,12 @@ export default defineComponent({
     }
     onMounted(() => {
       const localImage = LgetItem('localImage')
-      if (localImage) {
-        state.image = localImage
+      if (route.query.image) {
+        download(route.query.image)
+      } else {
+        if (localImage) {
+          state.image = localImage
+        }
       }
       window.ipcRenderer.on('download-done', (_event, data) => {
         state.image = 'atom:///' + data.filePath

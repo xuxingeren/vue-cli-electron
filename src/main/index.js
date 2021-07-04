@@ -40,7 +40,7 @@ if (config.winSingle) {
   winSingle()
 }
 
-function initWindow() {
+function initWindow(hashPath) {
   if (config.loading) {
     loaderWin = createWindow(
       {
@@ -87,8 +87,8 @@ function initWindow() {
         scrollBounce: isMac
       }
     },
-    '',
-    'index.html'
+    hashPath,
+    `index.html${hashPath}`
   )
   global.sharedObject.win = win
   ipcMain()
@@ -143,7 +143,13 @@ async function onAppReady() {
   //     console.error('Vue Devtools failed to install:', e.toString())
   //   }
   // }
-  initWindow()
+  initWindow('')
+  // if (process.argv.length > (app.isPackaged ? 1 : 2)) {
+  //   const scheme = process.argv[process.argv.length - 1]
+  //   initWindow('#/file/localFile')
+  // } else {
+  //   initWindow('')
+  // }
   win.webContents.once('did-finish-load', () => {
     if (process.argv.length > (app.isPackaged ? 1 : 2)) {
       app.emit('second-instance', null, process.argv)
