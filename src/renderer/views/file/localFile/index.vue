@@ -1,7 +1,7 @@
 <template>
   <div class="localFile">
     <div class="header">
-      <a-button type="primary" @click="download">点击下载图片</a-button>
+      <a-button type="primary" @click="download('https://xuxinblog.oss-cn-qingdao.aliyuncs.com/blog/2021/04/22/1.png')">点击下载图片</a-button>
       <a-upload
         :customRequest="customRequest"
         name="file"
@@ -61,10 +61,9 @@ export default defineComponent({
       wavesurfer: null,
       audioStatus: 'loading',
     })
-    function download() {
+    function download(url) {
       window.ipcRenderer.invoke('start-download', {
-        downloadUrl:
-          'https://xuxinblog.oss-cn-qingdao.aliyuncs.com/blog/2021/04/22/1.png',
+        downloadUrl: url,
         folder: '',
       })
     }
