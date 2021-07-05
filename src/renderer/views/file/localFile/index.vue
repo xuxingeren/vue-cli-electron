@@ -42,18 +42,19 @@
         </div>
       </div>
     </div>
-    <audio :src="state.audio" controls>
-    </audio>
+    <audio :src="state.audio" controls></audio>
   </div>
 </template>
 
 <script>
 import WaveSurfer from 'wavesurfer.js'
 import { defineComponent, onMounted, onUnmounted, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 import { LgetItem, LsetItem } from '@/utils/storage'
 
 export default defineComponent({
   setup() {
+    const route = useRoute()
     const state = reactive({
       image: '',
       audio: '',
@@ -90,8 +91,12 @@ export default defineComponent({
     }
     onMounted(() => {
       const localImage = LgetItem('localImage')
-      if (localImage) {
-        state.image = localImage
+      if (route.query.image) {
+        download(route.query.image)
+      } else {
+        if (localImage) {
+          state.image = localImage
+        }
       }
       window.ipcRenderer.on('download-done', (_event, data) => {
         state.image = 'atom:///' + data.filePath
