@@ -195,24 +195,24 @@ app.on('before-quit', () => {
 })
 app.on('quit', () => {
   console.log('quit')
-  if (
-    fse.pathExistsSync(path.join(app.getPath('userData'), './update.exe')) &&
-    fse.pathExistsSync(path.join(resourcesPath, './update.asar'))
-  ) {
-    const logPath = app.getPath('logs')
-    const out = fs.openSync(path.join(logPath, './out.log'), 'a')
-    const err = fs.openSync(path.join(logPath, './err.log'), 'a')
-    const child = spawn(
-      `"${path.join(app.getPath('userData'), './update.exe')}"`,
-      [`"${resourcesPath}"`, `"${app.getPath('exe')}"`],
-      {
-        detached: true,
-        shell: true,
-        stdio: ['ignore', out, err]
-      }
-    )
-    child.unref()
-  }
+  // if (
+  //   fse.pathExistsSync(path.join(app.getPath('userData'), './update.exe')) &&
+  //   fse.pathExistsSync(path.join(resourcesPath, './update.asar'))
+  // ) {
+  //   const logPath = app.getPath('logs')
+  //   const out = fs.openSync(path.join(logPath, './out.log'), 'a')
+  //   const err = fs.openSync(path.join(logPath, './err.log'), 'a')
+  //   const child = spawn(
+  //     `"${path.join(app.getPath('userData'), './update.exe')}"`,
+  //     [`"${resourcesPath}"`, `"${app.getPath('exe')}"`],
+  //     {
+  //       detached: true,
+  //       shell: true,
+  //       stdio: ['ignore', out, err]
+  //     }
+  //   )
+  //   child.unref()
+  // }
 })
 app.on('window-all-closed', () => {
   console.log('window-all-closed')

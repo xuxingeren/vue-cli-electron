@@ -133,7 +133,7 @@ module.exports = {
         win: {
           target: "nsis",
           icon: "public/icons/icon.ico",
-          requestedExecutionLevel: "highestAvailable"
+          // requestedExecutionLevel: "highestAvailable"
         },
         linux: {
           "icon": "public/icons"

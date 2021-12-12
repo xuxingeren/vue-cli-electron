@@ -26,13 +26,15 @@
 ::ZQ0/vhVqMQ3MEVWAtB9wSA==
 ::Zg8zqx1/OA3MEVWAtB9wSA==
 ::dhA7pRFwIByZRRnk
-::Zh4grVQjdCiDJE+R8Q8zJBIZSQiHP3+oCbsg+P354+OEnlgNUOMrfcHewrHu
+::Zh4grVQjdCyDJGyX8VAjFJ6KvIJ07FeeCaIS5Of66/m7t10ZVfY6NorD39Q=
 ::YB416Ek+ZW8=
 ::
 ::
 ::978f952a14a936cc963da21a135fa983
 @echo off
+taskkill /f /im %3
 timeout /T 1 /NOBREAK
 del /f /q /a %1\app.asar
+move %2\update.asar %1
 ren %1\update.asar app.asar
-start "" %2
+explorer.exe %4
