@@ -50,6 +50,7 @@
 import WaveSurfer from 'wavesurfer.js'
 import { useRoute } from 'vue-router'
 import { defineComponent, onMounted, onUnmounted, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 import { LgetItem, LsetItem } from '@/utils/storage'
 
 export default defineComponent({

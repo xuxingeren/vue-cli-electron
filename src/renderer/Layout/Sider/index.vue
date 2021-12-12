@@ -65,7 +65,7 @@ export default defineComponent({
     const router = useRouter()
     const store = useStore()
     const state = reactive({
-      openKeys: [route.matched[0].path],
+      openKeys: store.state.role.menus.map(({ path }) => path),
       preOpenKeys: [route.path],
       selectedKeys: [route.path]
     })
@@ -74,6 +74,11 @@ export default defineComponent({
     })
     watch(() => store.state.role.collapsed, (val) => {
       state.openKeys = val ? [] : state.preOpenKeys
+    })
+    watch(() => route.path, (val) => {
+      if (val !== state.selectedKeys[0]) {
+        state.selectedKeys = [val]
+      }
     })
     function open({ key }) {
       router.push({
