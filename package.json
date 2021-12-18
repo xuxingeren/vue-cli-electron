@@ -36,7 +36,7 @@
     "mockjs": "^1.1.0",
     "mousetrap": "^1.6.5",
     "qs": "^6.5.2",
-    "sudo-prompt": "^9.2.1",
+    "sudo-prompt": "git+https://github.com/xuxingeren/sudo-prompt.git",
     "vue": "^3.0.7",
     "vue-router": "^4.0.5",
     "vuex": "^4.0.0",
